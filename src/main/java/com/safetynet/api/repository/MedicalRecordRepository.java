@@ -1,7 +1,7 @@
 package com.safetynet.api.repository;
 
-import com.safetynet.api.model.MedicalRecord;
-import com.safetynet.api.model.Person;
+import com.safetynet.api.entity.MedicalRecord;
+import com.safetynet.api.entity.Person;
 
 import java.util.Collections;
 import java.util.HashSet;

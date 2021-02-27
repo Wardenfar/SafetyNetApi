@@ -1,6 +1,6 @@
 package com.safetynet.api.repository;
 
-import com.safetynet.api.model.FireStation;
+import com.safetynet.api.entity.FireStation;
 
 import java.util.Collections;
 import java.util.HashSet;

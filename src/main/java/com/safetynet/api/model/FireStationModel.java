@@ -10,6 +10,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.util.List;
+import java.util.Set;
 
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 @Setter
@@ -17,16 +18,16 @@ import java.util.List;
 public class FireStationModel {
 
     @JsonView(Views.FireStationModel.class)
-    List<Person> persons;
+    private Set<Person> persons;
 
     @JsonView(Views.FireStationModel.class)
-    long childCount;
+    private long childCount;
 
     @JsonView(Views.FireStationModel.class)
-    long adultCount;
+    private long adultCount;
 
     public static FireStationModel build(FireStation fireStation) {
-        List<Person> persons = fireStation.getPersons();
+        Set<Person> persons = fireStation.getPersons();
 
         FireStationModel model = new FireStationModel();
         model.setPersons(persons);

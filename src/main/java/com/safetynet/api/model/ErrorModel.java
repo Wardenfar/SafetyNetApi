@@ -8,8 +8,9 @@ import lombok.Setter;
 @Setter
 @Getter
 public class ErrorModel {
-    int code;
-    String message;
+
+    private int code;
+    private String message;
 
     public static ErrorModel build(int code, String message) {
         ErrorModel model = new ErrorModel();

@@ -5,6 +5,7 @@ import com.safetynet.api.entity.FireStation;
 import com.safetynet.api.exception.EntityNotFound;
 import com.safetynet.api.model.ErrorModel;
 import com.safetynet.api.model.FireStationModel;
+import com.safetynet.api.model.PhoneAlertModel;
 import com.safetynet.api.repository.FireStationRepository;
 import com.safetynet.api.util.Views;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -29,6 +30,15 @@ public class FireStationController {
             throw new EntityNotFound("FireStation not found with the stationNumber : " + stationNumber);
         }
         return FireStationModel.build(fireStation);
+    }
+
+    @GetMapping("/phoneAlert")
+    PhoneAlertModel phoneAlert(@RequestParam String stationNumber) throws EntityNotFound {
+        FireStation fireStation = this.fireStationRepo.findOneByStation(stationNumber);
+        if(fireStation == null){
+            throw new EntityNotFound("FireStation not found with the stationNumber : " + stationNumber);
+        }
+        return PhoneAlertModel.build(fireStation.getPersons());
     }
 
     @ExceptionHandler(EntityNotFound.class)

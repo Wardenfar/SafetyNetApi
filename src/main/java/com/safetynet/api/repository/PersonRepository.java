@@ -16,7 +16,7 @@ public class PersonRepository {
         assert person.getFireStation() != null;
         persons.add(person);
         FireStation fireStation = person.getFireStation();
-        fireStation.addIfNotExists(person);
+        fireStation.add(person);
     }
 
     public int count() {

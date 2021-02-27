@@ -18,16 +18,16 @@ import java.util.Set;
 public class ChildAlertModel {
 
     @JsonView(Views.ChildAlertModel.class)
-    List<ChildModel> children;
+    private List<ChildModel> children;
 
     @NoArgsConstructor
     @Getter
     @Setter
     public static class ChildModel {
         @JsonView(Views.ChildAlertModel.class)
-        Person child;
+        private Person child;
         @JsonView(Views.ChildAlertModel.class)
-        Set<Person> family;
+        private Set<Person> family;
     }
 
     public static ChildAlertModel build(Set<Person> children, PersonRepository personRepo) {

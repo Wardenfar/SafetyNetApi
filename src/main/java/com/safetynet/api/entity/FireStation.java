@@ -5,8 +5,8 @@ import com.fasterxml.jackson.databind.JsonNode;
 import com.safetynet.api.util.Views;
 import lombok.*;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.HashSet;
+import java.util.Set;
 
 @NoArgsConstructor
 @RequiredArgsConstructor
@@ -26,7 +26,7 @@ public class FireStation {
 
     @JsonView(FireStation.class)
     @EqualsAndHashCode.Exclude
-    private List<Person> persons = new ArrayList<>();
+    private Set<Person> persons = new HashSet<>();
 
     public static FireStation fromJson(JsonNode json) {
         FireStation fireStation = new FireStation();
@@ -35,9 +35,7 @@ public class FireStation {
         return fireStation;
     }
 
-    public void addIfNotExists(Person person) {
-        if (!persons.contains(person)) {
-            persons.add(person);
-        }
+    public void add(Person person) {
+        persons.add(person);
     }
 }

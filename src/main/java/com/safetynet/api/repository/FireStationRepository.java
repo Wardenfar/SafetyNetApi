@@ -6,7 +6,7 @@ import java.util.Collections;
 import java.util.HashSet;
 import java.util.Set;
 
-public class FireStationRepository {
+public class FireStationRepository extends AbstractRepository {
 
     private Set<FireStation> fireStations = new HashSet<>();
 
@@ -16,6 +16,11 @@ public class FireStationRepository {
 
     public int count() {
         return fireStations.size();
+    }
+
+    @Override
+    public void clear() {
+        fireStations.clear();
     }
 
     public Set<FireStation> findAll() {

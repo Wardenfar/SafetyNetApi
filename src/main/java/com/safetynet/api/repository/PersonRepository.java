@@ -8,7 +8,7 @@ import java.util.HashSet;
 import java.util.Set;
 import java.util.stream.Collectors;
 
-public class PersonRepository {
+public class PersonRepository extends AbstractRepository {
 
     private Set<Person> persons = new HashSet<>();
 
@@ -21,6 +21,11 @@ public class PersonRepository {
 
     public int count() {
         return persons.size();
+    }
+
+    @Override
+    public void clear() {
+        persons.clear();
     }
 
     public Set<Person> findAll() {

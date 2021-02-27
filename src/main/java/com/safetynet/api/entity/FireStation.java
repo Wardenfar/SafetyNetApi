@@ -1,4 +1,4 @@
-package com.safetynet.api.model;
+package com.safetynet.api.entity;
 
 import com.fasterxml.jackson.annotation.JsonView;
 import com.fasterxml.jackson.databind.JsonNode;

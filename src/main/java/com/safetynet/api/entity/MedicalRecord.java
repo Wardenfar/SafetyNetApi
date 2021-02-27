@@ -1,7 +1,8 @@
-package com.safetynet.api.model;
+package com.safetynet.api.entity;
 
 import com.fasterxml.jackson.annotation.JsonView;
 import com.fasterxml.jackson.databind.JsonNode;
+import com.safetynet.api.util.DateUtils;
 import com.safetynet.api.util.JsonUtils;
 import com.safetynet.api.util.Views;
 import lombok.*;
@@ -31,6 +32,14 @@ public class MedicalRecord {
     @JsonView(Views.MedicalRecord.class)
     @EqualsAndHashCode.Exclude
     private Person person;
+
+    public int age() {
+        return DateUtils.ageInYears(DateUtils.parseDate(birthdate));
+    }
+
+    public boolean isAdult() {
+        return DateUtils.ageInYears(DateUtils.parseDate(birthdate)) >= 18;
+    }
 
     public static MedicalRecord fromJson(JsonNode json) {
         MedicalRecord medicalRecord = new MedicalRecord();

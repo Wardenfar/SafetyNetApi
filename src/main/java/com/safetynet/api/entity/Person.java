@@ -1,7 +1,9 @@
-package com.safetynet.api.model;
+package com.safetynet.api.entity;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonView;
 import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.annotation.JsonNaming;
 import com.safetynet.api.util.Views;
 import lombok.*;
 
@@ -14,15 +16,15 @@ import lombok.*;
 public class Person {
 
     @NonNull
-    @JsonView(Views.Public.class)
+    @JsonView({Views.Public.class, Views.FireStationModel.class})
     private String firstName;
 
     @NonNull
-    @JsonView(Views.Public.class)
+    @JsonView({Views.Public.class, Views.FireStationModel.class})
     private String lastName;
 
     @NonNull
-    @JsonView(Views.Public.class)
+    @JsonView({Views.Public.class, Views.FireStationModel.class})
     private String address;
 
     @NonNull
@@ -34,7 +36,7 @@ public class Person {
     private String zip;
 
     @NonNull
-    @JsonView(Views.Public.class)
+    @JsonView({Views.Public.class, Views.FireStationModel.class})
     private String phone;
 
     @NonNull
@@ -46,6 +48,16 @@ public class Person {
 
     @JsonView(Views.Person.class)
     private MedicalRecord medicalRecord;
+
+    @JsonView({Views.Public.class, Views.FireStationModel.class})
+    @JsonProperty("age")
+    public String ageJson() {
+        if (medicalRecord != null) {
+            return String.valueOf(medicalRecord.age());
+        } else {
+            return "Unknown";
+        }
+    }
 
     public static Person fromJson(JsonNode json) {
         Person p = new Person();

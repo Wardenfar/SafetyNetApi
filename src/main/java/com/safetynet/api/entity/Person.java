@@ -46,7 +46,7 @@ public class Person {
     @JsonView(Views.Person.class)
     private FireStation fireStation;
 
-    @JsonView(Views.Person.class)
+    @JsonView({Views.Person.class, Views.PublicAndMedicalRecord.class})
     private MedicalRecord medicalRecord;
 
     @JsonView({Views.Public.class, Views.BasicPerson.class})

@@ -23,9 +23,9 @@ public class Views {
     public interface MedicalRecord {
     }
 
-    public interface PublicAndPerson extends Public, Person {
+    public interface PublicAndMedicalRecord extends Public {
     }
 
-    public interface PublicAndFireStation extends Public, FireStation {
+    public interface PublicAndPerson extends Public, Person {
     }
 }

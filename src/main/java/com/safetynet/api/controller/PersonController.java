@@ -1,7 +1,7 @@
 package com.safetynet.api.controller;
 
 import com.fasterxml.jackson.annotation.JsonView;
-import com.safetynet.api.model.Person;
+import com.safetynet.api.entity.Person;
 import com.safetynet.api.repository.PersonRepository;
 import com.safetynet.api.util.Views;
 import org.springframework.web.bind.annotation.GetMapping;

@@ -1,6 +1,9 @@
 package com.safetynet.api.util;
 
 public class Views {
+    public interface FireStationModel {
+    }
+
     public interface Public {
     }
 

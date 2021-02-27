@@ -5,9 +5,13 @@ import com.safetynet.api.entity.Person;
 import com.safetynet.api.repository.FireStationRepository;
 import com.safetynet.api.repository.MedicalRecordRepository;
 import com.safetynet.api.repository.PersonRepository;
+import com.safetynet.api.util.FeedTestDatabase;
 import com.safetynet.api.util.ResponseBodyMatchers;
+import org.junit.After;
+import org.junit.Before;
 import org.junit.Test;
 import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
@@ -17,10 +21,7 @@ import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 import static org.hamcrest.Matchers.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
@@ -44,7 +45,12 @@ public class PersonInfoRouteTests {
     @Autowired
     private MedicalRecordRepository medicalRecordRepo;
 
-    @AfterEach
+    @Before
+    public void beforeEach() {
+        FeedTestDatabase.feedDatabase(personRepo, fireStationRepo, medicalRecordRepo);
+    }
+
+    @After
     public void afterEach() {
         personRepo.clear();
         fireStationRepo.clear();
@@ -53,38 +59,40 @@ public class PersonInfoRouteTests {
 
     @Test
     public void testPersonInfo() throws Exception {
-        Map<String, Person> persons = feedDatabase();
+        Person personTest1 = personRepo.findAllByFirstNameAndLastName("Test1", "Example").iterator().next();
+        Person personTest2 = personRepo.findAllByFirstNameAndLastName("Test2", "Example").iterator().next();
+        Person personTest3 = personRepo.findAllByFirstNameAndLastName("Test3", "Example").iterator().next();
+        Person personJean1 = personRepo.findAllByFirstNameAndLastName("Jean1", "Paul").iterator().next();
 
-        makePersonInfoRequest("Test1", "Example", 1, Arrays.asList(persons.get("Test1_Example")));
-        makePersonInfoRequest("Test2", "Example", 1, Arrays.asList(persons.get("Test2_Example")));
-        makePersonInfoRequest("Test3", "Example", 1, Arrays.asList(persons.get("Test3_Example")));
-        makePersonInfoRequest("Jean1", "Paul", 1, Arrays.asList(persons.get("Jean1_Paul")));
+        makePersonInfoRequest(personTest1.getFirstName(), personTest1.getLastName(), 1, Arrays.asList(personTest1));
+        makePersonInfoRequest(personTest2.getFirstName(), personTest2.getLastName(), 1, Arrays.asList(personTest2));
+        makePersonInfoRequest(personTest3.getFirstName(), personTest3.getLastName(), 1, Arrays.asList(personTest3));
+        makePersonInfoRequest(personJean1.getFirstName(), personJean1.getLastName(), 1, Arrays.asList(personJean1));
     }
 
     @Test
     public void testPersonInfo_NotFound() throws Exception {
-        Map<String, Person> persons = feedDatabase();
-
         makePersonInfoRequest("Fake", "Example", 0, Arrays.asList());
         makePersonInfoRequest("Test1", "Fake", 0, Arrays.asList());
     }
 
     @Test
     public void testPersonInfo_SameName() throws Exception {
-        Map<String, Person> persons = feedDatabase();
+        Iterator<Person> iterator = personRepo.findAllByFirstNameAndLastName("Double", "Two").iterator();
+        Person personDouble1 = iterator.next();
+        Person personDouble2 = iterator.next();
 
-        makePersonInfoRequest("Double", "Two", 2, Arrays.asList(persons.get("Double_Two"), persons.get("Double_Two_2")));
+        makePersonInfoRequest(personDouble1.getFirstName(), personDouble1.getLastName(), 2, Arrays.asList(personDouble1, personDouble2));
     }
 
     @Test
     public void testPersonInfo_ExactlyEqual() throws Exception {
-        Map<String, Person> persons = feedDatabase();
+        Person personExact = personRepo.findAllByFirstNameAndLastName("Equal", "Exact").iterator().next();
 
-        makePersonInfoRequest("Equal", "Exact", 1, Arrays.asList(persons.get("Equal_Exact")));
+        makePersonInfoRequest("Equal", "Exact", 1, Arrays.asList(personExact));
     }
 
     public void makePersonInfoRequest(String firstName, String lastName, int count, List<Person> persons) throws Exception {
-
         mvc.perform(
                 get("/personInfo?firstName=" + firstName + "&lastName=" + lastName).contentType(MediaType.APPLICATION_JSON)
         )
@@ -92,61 +100,5 @@ public class PersonInfoRouteTests {
                 .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
                 .andExpect(jsonPath("$", hasSize(count)))
                 .andExpect(ResponseBodyMatchers.responseBody().isListEqualInJson(persons, Person.class));
-    }
-
-    public Map<String, Person> feedDatabase() {
-        FireStation fs1 = createFireStation("1", "506 rue Triangle");
-        FireStation fs2 = createFireStation("2", "102 rue Triangle");
-
-        Map<String, Person> persons = new HashMap<>();
-
-        createPerson(persons, fs1, "Test1", "Example", "", "", "", "", "");
-        createPerson(persons, fs1, "Test2", "Example", "", "", "", "", "");
-        createPerson(persons, fs1, "Test3", "Example", "", "", "", "", "");
-        createPerson(persons, fs2, "Jean1", "Paul", "", "", "", "", "");
-
-        createPerson(persons, fs1, "Double", "Two", "", "Paris", "", "", "");
-        createPerson(persons, fs1, "Double", "Two", "", "Lyon", "", "", "");
-
-        createPerson(persons, fs1, "Equal", "Exact", "Same", "Same", "Same", "", "");
-        createPerson(persons, fs1, "Equal", "Exact", "Same", "Same", "Same", "", "");
-
-        assert personRepo.count() == persons.size() - 1;
-
-        return persons;
-    }
-
-    public FireStation createFireStation(String station, String address) {
-        FireStation fireStation = new FireStation();
-        fireStation.setStation(station);
-        fireStation.setAddress(address);
-        fireStationRepo.add(fireStation);
-        return fireStation;
-    }
-
-    public Person createPerson(Map<String, Person> persons, FireStation fireStation, String firstName, String lastName, String address, String city, String zip, String phone, String email) {
-        Person person = new Person();
-        person.setFirstName(firstName);
-        person.setLastName(lastName);
-        person.setAddress(address);
-        person.setCity(city);
-        person.setZip(zip);
-        person.setEmail(email);
-        person.setPhone(phone);
-        person.setFireStation(fireStation);
-
-        String key = firstName+"_"+lastName;
-        if(persons.containsKey(key)) {
-            int i = 2;
-            while (persons.containsKey(key + "_" + i)) {
-                i++;
-            }
-            persons.put(key + "_" + i, person);
-        }else{
-            persons.put(key, person);
-        }
-
-        personRepo.add(person);
-        return person;
     }
 }

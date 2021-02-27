@@ -2,9 +2,9 @@ package com.safetynet.api;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.safetynet.api.model.FireStation;
-import com.safetynet.api.model.MedicalRecord;
-import com.safetynet.api.model.Person;
+import com.safetynet.api.entity.FireStation;
+import com.safetynet.api.entity.MedicalRecord;
+import com.safetynet.api.entity.Person;
 import com.safetynet.api.repository.FireStationRepository;
 import com.safetynet.api.repository.MedicalRecordRepository;
 import com.safetynet.api.repository.PersonRepository;

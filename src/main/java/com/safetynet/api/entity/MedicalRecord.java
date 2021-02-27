@@ -11,7 +11,6 @@ import java.util.List;
 
 @NoArgsConstructor
 @RequiredArgsConstructor
-@ToString
 @Getter
 @Setter
 @EqualsAndHashCode

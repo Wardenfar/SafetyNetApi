@@ -1,18 +1,18 @@
 package com.safetynet.api.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonView;
 import com.fasterxml.jackson.databind.JsonNode;
-import com.fasterxml.jackson.databind.annotation.JsonNaming;
 import com.safetynet.api.util.Views;
 import lombok.*;
 
 @NoArgsConstructor
 @RequiredArgsConstructor
-@ToString
 @Getter
 @Setter
 @EqualsAndHashCode
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class Person {
 
     @NonNull
@@ -43,6 +43,7 @@ public class Person {
     @JsonView(Views.Public.class)
     private String email;
 
+    @NonNull
     @JsonView(Views.Person.class)
     private FireStation fireStation;
 
@@ -50,7 +51,7 @@ public class Person {
     private MedicalRecord medicalRecord;
 
     @JsonView({Views.Public.class, Views.BasicPerson.class})
-    @JsonProperty("age")
+    @JsonProperty(value = "age", access = JsonProperty.Access.READ_ONLY)
     public String ageJson() {
         if (medicalRecord != null) {
             return String.valueOf(medicalRecord.age());

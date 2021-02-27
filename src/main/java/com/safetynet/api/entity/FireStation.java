@@ -10,7 +10,6 @@ import java.util.Set;
 
 @NoArgsConstructor
 @RequiredArgsConstructor
-@ToString
 @Getter
 @Setter
 @EqualsAndHashCode
@@ -20,7 +19,6 @@ public class FireStation {
     @JsonView(Views.Public.class)
     private String station;
 
-    @NonNull
     @JsonView(Views.Public.class)
     private String address;
 

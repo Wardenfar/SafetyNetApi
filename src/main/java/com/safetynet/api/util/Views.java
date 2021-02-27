@@ -1,7 +1,14 @@
 package com.safetynet.api.util;
 
 public class Views {
-    public interface FireStationModel {
+
+    public interface BasicPerson {
+    }
+
+    public interface FireStationModel extends BasicPerson {
+    }
+
+    public interface ChildAlertModel extends BasicPerson {
     }
 
     public interface Public {

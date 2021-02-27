@@ -32,4 +32,16 @@ public class PersonRepository {
                 .filter(p -> p.getFirstName().equals(firstName) && p.getLastName().equals(lastName))
                 .collect(Collectors.toSet());
     }
+
+    public Set<Person> findAllByAddress(String address) {
+        return persons.stream()
+                .filter(p -> p.getAddress().equals(address))
+                .collect(Collectors.toSet());
+    }
+
+    public Set<Person> findAllByLastName(String lastName) {
+        return persons.stream()
+                .filter(p -> p.getLastName().equals(lastName))
+                .collect(Collectors.toSet());
+    }
 }

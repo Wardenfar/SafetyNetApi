@@ -2,6 +2,7 @@ package com.safetynet.api.controller;
 
 import com.fasterxml.jackson.annotation.JsonView;
 import com.safetynet.api.entity.Person;
+import com.safetynet.api.model.ChildAlertModel;
 import com.safetynet.api.repository.PersonRepository;
 import com.safetynet.api.util.Views;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -23,5 +24,12 @@ public class PersonController {
     @JsonView(Views.PublicAndPerson.class)
     Set<Person> personInfo(@RequestParam String firstName, @RequestParam String lastName) {
         return this.personRepo.findAllByFirstNameAndLastName(firstName, lastName);
+    }
+
+    @GetMapping("/childAlert")
+    @JsonView(Views.ChildAlertModel.class)
+    ChildAlertModel childAlert(@RequestParam String address) {
+        Set<Person> children = this.personRepo.findAllByAddress(address);
+        return ChildAlertModel.build(children, this.personRepo);
     }
 }

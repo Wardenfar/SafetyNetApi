@@ -16,15 +16,15 @@ import lombok.*;
 public class Person {
 
     @NonNull
-    @JsonView({Views.Public.class, Views.FireStationModel.class})
+    @JsonView({Views.Public.class, Views.BasicPerson.class})
     private String firstName;
 
     @NonNull
-    @JsonView({Views.Public.class, Views.FireStationModel.class})
+    @JsonView({Views.Public.class, Views.BasicPerson.class})
     private String lastName;
 
     @NonNull
-    @JsonView({Views.Public.class, Views.FireStationModel.class})
+    @JsonView({Views.Public.class, Views.BasicPerson.class})
     private String address;
 
     @NonNull
@@ -36,7 +36,7 @@ public class Person {
     private String zip;
 
     @NonNull
-    @JsonView({Views.Public.class, Views.FireStationModel.class})
+    @JsonView({Views.Public.class, Views.BasicPerson.class})
     private String phone;
 
     @NonNull
@@ -49,7 +49,7 @@ public class Person {
     @JsonView(Views.Person.class)
     private MedicalRecord medicalRecord;
 
-    @JsonView({Views.Public.class, Views.FireStationModel.class})
+    @JsonView({Views.Public.class, Views.BasicPerson.class})
     @JsonProperty("age")
     public String ageJson() {
         if (medicalRecord != null) {

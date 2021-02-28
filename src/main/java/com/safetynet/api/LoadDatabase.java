@@ -73,16 +73,12 @@ public class LoadDatabase {
             String personFirstName = json.get("firstName").asText();
             String personLastName = json.get("lastName").asText();
 
-            Set<Person> persons = personRepo.findAllByFirstNameAndLastName(personFirstName, personLastName);
-            if (persons.size() == 0) {
+            Person person = personRepo.findAllByFirstNameAndLastName(personFirstName, personLastName);
+            if (person == null) {
                 log.error("No person found for name : " + personFirstName + " " + personLastName);
                 continue;
             }
-            if (persons.size() > 1) {
-                log.error(persons.size() + " persons found for name : " + personFirstName + " " + personLastName);
-                continue;
-            }
-            medicalRecord.setPerson(persons.iterator().next());
+            medicalRecord.setPerson(person);
 
             medicalRecordRepo.add(medicalRecord);
         }

@@ -13,17 +13,19 @@ import java.util.Set;
 @Getter
 @Setter
 @EqualsAndHashCode
+@ToString
 public class FireStation {
 
     @NonNull
-    @JsonView(Views.Public.class)
+    @JsonView(Views.FireStationProperties.class)
     private String station;
 
-    @JsonView(Views.Public.class)
+    @JsonView(Views.FireStationProperties.class)
     private String address;
 
-    @JsonView(FireStation.class)
+    @JsonView(Views.FireStationRelations.class)
     @EqualsAndHashCode.Exclude
+    @ToString.Exclude
     private Set<Person> persons = new HashSet<>();
 
     public static FireStation fromJson(JsonNode json) {

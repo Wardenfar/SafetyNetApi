@@ -13,44 +13,45 @@ import lombok.*;
 @Setter
 @EqualsAndHashCode
 @JsonIgnoreProperties(ignoreUnknown = true)
+@ToString
 public class Person {
 
     @NonNull
-    @JsonView({Views.Public.class, Views.BasicPerson.class})
+    @JsonView({Views.PersonFirstName.class})
     private String firstName;
 
     @NonNull
-    @JsonView({Views.Public.class, Views.BasicPerson.class})
+    @JsonView({Views.PersonLastName.class})
     private String lastName;
 
     @NonNull
-    @JsonView({Views.Public.class, Views.BasicPerson.class})
+    @JsonView({Views.PersonAddress.class})
     private String address;
 
     @NonNull
-    @JsonView(Views.Public.class)
+    @JsonView({Views.PersonAddress.class})
     private String city;
 
     @NonNull
-    @JsonView(Views.Public.class)
+    @JsonView({Views.PersonAddress.class})
     private String zip;
 
     @NonNull
-    @JsonView({Views.Public.class, Views.BasicPerson.class})
+    @JsonView({Views.PersonPhone.class})
     private String phone;
 
     @NonNull
-    @JsonView(Views.Public.class)
+    @JsonView({Views.PersonEmail.class})
     private String email;
 
     @NonNull
-    @JsonView(Views.Person.class)
+    @JsonView({Views.PersonFireStation.class})
     private FireStation fireStation;
 
-    @JsonView({Views.Person.class, Views.PublicAndMedicalRecord.class})
+    @JsonView({Views.PersonMedicalRecord.class})
     private MedicalRecord medicalRecord;
 
-    @JsonView({Views.Public.class, Views.BasicPerson.class})
+    @JsonView({Views.PersonAge.class})
     @JsonProperty(value = "age", access = JsonProperty.Access.READ_ONLY)
     public String ageJson() {
         if (medicalRecord != null) {

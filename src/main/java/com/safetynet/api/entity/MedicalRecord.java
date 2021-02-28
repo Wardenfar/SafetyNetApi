@@ -14,22 +14,24 @@ import java.util.List;
 @Getter
 @Setter
 @EqualsAndHashCode
+@ToString
 public class MedicalRecord {
 
     @NonNull
-    @JsonView(Views.Public.class)
+    @JsonView(Views.MedicalRecordProperties.class)
     private String birthdate;
 
     @NonNull
-    @JsonView(Views.Public.class)
+    @JsonView(Views.MedicalRecordProperties.class)
     private List<String> medications;
 
     @NonNull
-    @JsonView(Views.Public.class)
+    @JsonView(Views.MedicalRecordProperties.class)
     private List<String> allergies;
 
-    @JsonView(Views.MedicalRecord.class)
+    @JsonView(Views.MedicalRecordRelations.class)
     @EqualsAndHashCode.Exclude
+    @ToString.Exclude
     private Person person;
 
     public int age() {

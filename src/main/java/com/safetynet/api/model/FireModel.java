@@ -15,10 +15,10 @@ import java.util.Set;
 @Setter
 public class FireModel {
 
-    @JsonView(Views.PublicAndMedicalRecord.class)
+    @JsonView(Views.FireModel.class)
     FireStation fireStation;
 
-    @JsonView(Views.PublicAndMedicalRecord.class)
+    @JsonView(Views.FireModel.class)
     Set<Person> persons;
 
     public static FireModel build(FireStation fireStation){

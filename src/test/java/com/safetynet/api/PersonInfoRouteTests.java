@@ -1,17 +1,13 @@
 package com.safetynet.api;
 
-import com.safetynet.api.entity.FireStation;
 import com.safetynet.api.entity.Person;
 import com.safetynet.api.repository.FireStationRepository;
 import com.safetynet.api.repository.MedicalRecordRepository;
 import com.safetynet.api.repository.PersonRepository;
 import com.safetynet.api.util.FeedTestDatabase;
-import com.safetynet.api.util.ResponseBodyMatchers;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
-import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
@@ -20,10 +16,10 @@ import org.springframework.http.MediaType;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
-
-import java.util.*;
-
+import org.springframework.test.web.servlet.ResultActions;
 import static org.hamcrest.Matchers.*;
+import java.util.Arrays;
+
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
@@ -59,46 +55,56 @@ public class PersonInfoRouteTests {
 
     @Test
     public void testPersonInfo() throws Exception {
-        Person personTest1 = personRepo.findAllByFirstNameAndLastName("Test1", "Example").iterator().next();
-        Person personTest2 = personRepo.findAllByFirstNameAndLastName("Test2", "Example").iterator().next();
-        Person personTest3 = personRepo.findAllByFirstNameAndLastName("Test3", "Example").iterator().next();
-        Person personJean1 = personRepo.findAllByFirstNameAndLastName("Jean1", "Paul").iterator().next();
-
-        makePersonInfoRequest(personTest1.getFirstName(), personTest1.getLastName(), 1, Arrays.asList(personTest1));
-        makePersonInfoRequest(personTest2.getFirstName(), personTest2.getLastName(), 1, Arrays.asList(personTest2));
-        makePersonInfoRequest(personTest3.getFirstName(), personTest3.getLastName(), 1, Arrays.asList(personTest3));
-        makePersonInfoRequest(personJean1.getFirstName(), personJean1.getLastName(), 1, Arrays.asList(personJean1));
+        makePersonInfoRequestSuccess(personRepo.findAllByFirstNameAndLastName("Test1", "Example"));
+        makePersonInfoRequestSuccess(personRepo.findAllByFirstNameAndLastName("Test2", "Example"));
+        makePersonInfoRequestSuccess(personRepo.findAllByFirstNameAndLastName("Test3", "Example"));
+        makePersonInfoRequestSuccess(personRepo.findAllByFirstNameAndLastName("Pierre", "Paul"));
+        makePersonInfoRequestSuccess(personRepo.findAllByFirstNameAndLastName("Jean", "Paul"));
+        makePersonInfoRequestSuccess(personRepo.findAllByFirstNameAndLastName("Henri", "Paul"));
     }
 
     @Test
     public void testPersonInfo_NotFound() throws Exception {
-        makePersonInfoRequest("Fake", "Example", 0, Arrays.asList());
-        makePersonInfoRequest("Test1", "Fake", 0, Arrays.asList());
+        makePersonInfoRequestFail("Fake", "Example");
+        makePersonInfoRequestFail("Test1", "Fake");
     }
 
-    @Test
-    public void testPersonInfo_SameName() throws Exception {
-        Iterator<Person> iterator = personRepo.findAllByFirstNameAndLastName("Double", "Two").iterator();
-        Person personDouble1 = iterator.next();
-        Person personDouble2 = iterator.next();
+    public void makePersonInfoRequestSuccess(Person person) throws Exception {
 
-        makePersonInfoRequest(personDouble1.getFirstName(), personDouble1.getLastName(), 2, Arrays.asList(personDouble1, personDouble2));
-    }
+        String[] allergies = person.getMedicalRecord().getAllergies().toArray(new String[0]);
+        String[] medications = person.getMedicalRecord().getMedications().toArray(new String[0]);
 
-    @Test
-    public void testPersonInfo_ExactlyEqual() throws Exception {
-        Person personExact = personRepo.findAllByFirstNameAndLastName("Equal", "Exact").iterator().next();
-
-        makePersonInfoRequest("Equal", "Exact", 1, Arrays.asList(personExact));
-    }
-
-    public void makePersonInfoRequest(String firstName, String lastName, int count, List<Person> persons) throws Exception {
-        mvc.perform(
-                get("/personInfo?firstName=" + firstName + "&lastName=" + lastName).contentType(MediaType.APPLICATION_JSON)
+        ResultActions result = mvc.perform(
+                get("/personInfo?firstName=" + person.getFirstName() + "&lastName=" + person.getLastName()).contentType(MediaType.APPLICATION_JSON)
         )
                 .andExpect(status().isOk())
                 .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
-                .andExpect(jsonPath("$", hasSize(count)))
-                .andExpect(ResponseBodyMatchers.responseBody().isListEqualInJson(persons, Person.class));
+
+                .andExpect(jsonPath("$.firstName", is(person.getFirstName())))
+                .andExpect(jsonPath("$.lastName", is(person.getLastName())))
+                .andExpect(jsonPath("$.age", is(person.ageJson())))
+                .andExpect(jsonPath("$.email", is(person.getEmail())))
+                .andExpect(jsonPath("$.address", is(person.getAddress())))
+                .andExpect(jsonPath("$.zip", is(person.getZip())))
+                .andExpect(jsonPath("$.city", is(person.getCity())))
+
+                .andExpect(jsonPath("$.medicalRecord").exists())
+                .andExpect(jsonPath("$.medicalRecord.birthdate", is(person.getMedicalRecord().getBirthdate())))
+
+                .andExpect(jsonPath("$.medicalRecord.allergies", hasSize(allergies.length)))
+                .andExpect(jsonPath("$.medicalRecord.allergies", containsInAnyOrder(allergies)))
+
+                .andExpect(jsonPath("$.medicalRecord.medications", hasSize(medications.length)))
+                .andExpect(jsonPath("$.medicalRecord.medications", containsInAnyOrder(medications)))
+
+                .andExpect(jsonPath("$.medicalRecord.person").doesNotExist())
+                .andExpect(jsonPath("$.fireStation").doesNotExist());
+    }
+
+    public void makePersonInfoRequestFail(String firstName, String lastName) throws Exception {
+        ResultActions result = mvc.perform(
+                get("/personInfo?firstName=" + firstName + "&lastName=" + lastName).contentType(MediaType.APPLICATION_JSON)
+        )
+                .andExpect(status().is4xxClientError());
     }
 }

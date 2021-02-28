@@ -2,6 +2,7 @@ package com.safetynet.api.controller;
 
 import com.fasterxml.jackson.annotation.JsonView;
 import com.safetynet.api.entity.Person;
+import com.safetynet.api.exception.EntityNotFound;
 import com.safetynet.api.model.ChildAlertModel;
 import com.safetynet.api.repository.PersonRepository;
 import com.safetynet.api.util.Views;
@@ -21,9 +22,13 @@ public class PersonController {
     }
 
     @GetMapping("/personInfo")
-    @JsonView(Views.PublicAndPerson.class)
-    Set<Person> personInfo(@RequestParam String firstName, @RequestParam String lastName) {
-        return this.personRepo.findAllByFirstNameAndLastName(firstName, lastName);
+    @JsonView(Views.PersonInfoModel.class)
+    Person personInfo(@RequestParam String firstName, @RequestParam String lastName) throws EntityNotFound {
+        Person person = this.personRepo.findAllByFirstNameAndLastName(firstName, lastName);
+        if(person == null) {
+            throw new EntityNotFound();
+        }
+        return person;
     }
 
     @GetMapping("/childAlert")

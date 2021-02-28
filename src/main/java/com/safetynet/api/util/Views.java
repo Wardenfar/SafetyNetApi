@@ -2,30 +2,51 @@ package com.safetynet.api.util;
 
 public class Views {
 
-    public interface BasicPerson {
+    public interface PersonFirstName {
     }
 
-    public interface FireStationModel extends BasicPerson {
+    public interface PersonLastName {
     }
 
-    public interface ChildAlertModel extends BasicPerson {
+    public interface PersonPhone {
     }
 
-    public interface Public {
+    public interface PersonAge {
     }
 
-    public interface Person {
+    public interface PersonEmail {
     }
 
-    public interface FireStation {
+    public interface PersonAddress {
     }
 
-    public interface MedicalRecord {
+    public interface PersonFireStation {
     }
 
-    public interface PublicAndMedicalRecord extends Public {
+    public interface PersonMedicalRecord {
     }
 
-    public interface PublicAndPerson extends Public, Person {
+    public interface FireStationProperties {
+    }
+
+    public interface FireStationRelations {
+    }
+
+    public interface MedicalRecordProperties {
+    }
+
+    public interface MedicalRecordRelations {
+    }
+
+    public interface FireStationModel extends PersonFirstName, PersonLastName, PersonAddress, PersonPhone, PersonAge {
+    }
+
+    public interface ChildAlertModel extends PersonFirstName, PersonLastName, PersonAge {
+    }
+
+    public interface FireModel extends PersonFirstName, PersonLastName, PersonPhone, PersonAge, PersonMedicalRecord, MedicalRecordProperties {
+    }
+
+    public interface PersonInfoModel extends PersonFirstName, PersonLastName, PersonAddress, PersonAge, PersonEmail, PersonMedicalRecord, MedicalRecordProperties {
     }
 }

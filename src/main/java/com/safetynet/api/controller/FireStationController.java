@@ -26,7 +26,7 @@ public class FireStationController {
     FireStationModel personInfo(@RequestParam String stationNumber) throws EntityNotFound {
         FireStation fireStation = this.fireStationRepo.findOneByStation(stationNumber);
         if(fireStation == null){
-            throw new EntityNotFound("FireStation not found with the stationNumber : " + stationNumber);
+            throw new EntityNotFound();
         }
         return FireStationModel.build(fireStation);
     }
@@ -35,17 +35,17 @@ public class FireStationController {
     PhoneAlertModel phoneAlert(@RequestParam String stationNumber) throws EntityNotFound {
         FireStation fireStation = this.fireStationRepo.findOneByStation(stationNumber);
         if(fireStation == null){
-            throw new EntityNotFound("FireStation not found with the stationNumber : " + stationNumber);
+            throw new EntityNotFound();
         }
         return PhoneAlertModel.build(fireStation.getPersons());
     }
 
     @GetMapping("/fire")
-    @JsonView(Views.PublicAndMedicalRecord.class)
+    @JsonView(Views.FireModel.class)
     FireModel fire(@RequestParam String address) throws EntityNotFound {
         FireStation fireStation = this.fireStationRepo.findOneByAddress(address);
         if(fireStation == null){
-            throw new EntityNotFound("FireStation not found with the address : " + address);
+            throw new EntityNotFound();
         }
         return FireModel.build(fireStation);
     }

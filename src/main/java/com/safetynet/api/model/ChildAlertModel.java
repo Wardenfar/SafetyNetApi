@@ -37,7 +37,9 @@ public class ChildAlertModel {
         for (Person child : children) {
             ChildModel childModel = new ChildModel();
             childModel.setChild(child);
-            childModel.setFamily(personRepo.findAllByLastName(child.getLastName()));
+            Set<Person> family = personRepo.findAllByLastName(child.getLastName());
+            family.remove(child);
+            childModel.setFamily(family);
             childModels.add(childModel);
         }
         model.setChildren(childModels);

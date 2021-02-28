@@ -17,7 +17,6 @@ import org.springframework.context.annotation.Profile;
 
 import java.io.IOException;
 import java.io.InputStream;
-import java.util.Set;
 
 
 @Configuration
@@ -73,7 +72,7 @@ public class LoadDatabase {
             String personFirstName = json.get("firstName").asText();
             String personLastName = json.get("lastName").asText();
 
-            Person person = personRepo.findAllByFirstNameAndLastName(personFirstName, personLastName);
+            Person person = personRepo.findOneByFirstNameAndLastName(personFirstName, personLastName);
             if (person == null) {
                 log.error("No person found for name : " + personFirstName + " " + personLastName);
                 continue;

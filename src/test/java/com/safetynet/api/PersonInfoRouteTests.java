@@ -18,7 +18,6 @@ import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
 import static org.hamcrest.Matchers.*;
-import java.util.Arrays;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
@@ -55,12 +54,12 @@ public class PersonInfoRouteTests {
 
     @Test
     public void testPersonInfo() throws Exception {
-        makePersonInfoRequestSuccess(personRepo.findAllByFirstNameAndLastName("Test1", "Example"));
-        makePersonInfoRequestSuccess(personRepo.findAllByFirstNameAndLastName("Test2", "Example"));
-        makePersonInfoRequestSuccess(personRepo.findAllByFirstNameAndLastName("Test3", "Example"));
-        makePersonInfoRequestSuccess(personRepo.findAllByFirstNameAndLastName("Pierre", "Paul"));
-        makePersonInfoRequestSuccess(personRepo.findAllByFirstNameAndLastName("Jean", "Paul"));
-        makePersonInfoRequestSuccess(personRepo.findAllByFirstNameAndLastName("Henri", "Paul"));
+        makePersonInfoRequestSuccess(personRepo.findOneByFirstNameAndLastName("Test1", "Example"));
+        makePersonInfoRequestSuccess(personRepo.findOneByFirstNameAndLastName("Test2", "Example"));
+        makePersonInfoRequestSuccess(personRepo.findOneByFirstNameAndLastName("Test3", "Example"));
+        makePersonInfoRequestSuccess(personRepo.findOneByFirstNameAndLastName("Pierre", "Paul"));
+        makePersonInfoRequestSuccess(personRepo.findOneByFirstNameAndLastName("Jean", "Paul"));
+        makePersonInfoRequestSuccess(personRepo.findOneByFirstNameAndLastName("Henri", "Paul"));
     }
 
     @Test

@@ -32,7 +32,7 @@ public class PersonRepository extends AbstractRepository {
         return Collections.unmodifiableSet(persons);
     }
 
-    public Person findAllByFirstNameAndLastName(String firstName, String lastName) {
+    public Person findOneByFirstNameAndLastName(String firstName, String lastName) {
         return persons.stream()
                 .filter(p -> p.getFirstName().equals(firstName) && p.getLastName().equals(lastName))
                 .findFirst().orElse(null);

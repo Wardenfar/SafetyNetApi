@@ -9,20 +9,22 @@ import com.safetynet.api.repository.PersonRepository;
 public class FeedTestDatabase {
 
     public static void feedDatabase(PersonRepository personRepo, FireStationRepository fireStationRepo, MedicalRecordRepository medicalRecordRepo) {
-        FireStation fs1 = createFireStation(fireStationRepo, "1", "506 rue Triangle");
+        FireStation fs1 = createFireStation(fireStationRepo, "1", "506 rue Losange");
         FireStation fs2 = createFireStation(fireStationRepo, "2", "102 rue Triangle");
+        FireStation fs3 = createFireStation(fireStationRepo, "3", "51 rue Rectangle");
 
-        createPerson(personRepo, fs1, "Test1", "Example", "", "", "", "", "");
-        createPerson(personRepo, fs1, "Test2", "Example", "", "", "", "", "");
-        createPerson(personRepo, fs1, "Test3", "Example", "", "", "", "", "");
-        createPerson(personRepo, fs2, "Jean1", "Paul", "", "", "", "", "");
+        createPerson(personRepo, fs1, "Test1", "Example", "", "", "", "001-001", "");
+        createPerson(personRepo, fs1, "Test2", "Example", "", "", "", "001-002", "");
+        createPerson(personRepo, fs1, "Test3", "Example", "", "", "", "001-003", "");
+        createPerson(personRepo, fs2, "Jean1", "Paul", "", "", "", "001-004", "");
 
-        createPerson(personRepo, fs1, "Double", "Two", "", "Paris", "", "", "");
-        createPerson(personRepo, fs1, "Double", "Two", "", "Lyon", "", "", "");
+        createPerson(personRepo, fs1, "Double", "Two", "", "Paris", "", "002-001", "");
+        createPerson(personRepo, fs2, "Double", "Two", "", "Lyon", "", "002-002", "");
 
-        createPerson(personRepo, fs1, "Equal", "Exact", "Same", "Same", "Same", "", "");
-        createPerson(personRepo, fs1, "Equal", "Exact", "Same", "Same", "Same", "", "");
+        createPerson(personRepo, fs3, "Equal", "Exact", "Same", "Same", "Same", "003-001", "");
+        createPerson(personRepo, fs3, "Equal", "Exact", "Same", "Same", "Same", "003-001", "");
 
+        assert fireStationRepo.count() == 3; // The two last are equals
         assert personRepo.count() == 8 - 1; // The two last are equals
     }
 

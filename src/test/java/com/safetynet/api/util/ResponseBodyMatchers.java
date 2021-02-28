@@ -13,7 +13,7 @@ public class ResponseBodyMatchers {
     private ObjectMapper objectMapper = new ObjectMapper();
 
     public <T> ResultMatcher isListEqualInJson(
-            List<Person> expectedObject, Class type) {
+            List<T> expectedObject, Class<T> type) {
 
         ObjectMapper mapper = new ObjectMapper();
         TypeBase expectedType = mapper.getTypeFactory().constructCollectionType(List.class, type);

@@ -28,7 +28,7 @@ public class FireStationController {
 
     @GetMapping("/firestation")
     @JsonView(Views.FireStationModel.class)
-    FireStationModel personInfo(@RequestParam String stationNumber) throws EntityNotFound {
+    FireStationModel fireStation(@RequestParam String stationNumber) throws EntityNotFound {
         FireStation fireStation = this.fireStationRepo.findOneByStation(stationNumber);
         if (fireStation == null) {
             throw new EntityNotFound("FireStation not found by station number : " + stationNumber);

@@ -9,7 +9,6 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-import java.util.List;
 import java.util.Set;
 
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
@@ -26,13 +25,17 @@ public class FireStationModel {
     @JsonView(Views.FireStationModel.class)
     private long adultCount;
 
+    @JsonView(Views.FireStationModel.class)
+    private long unknownCount;
+
     public static FireStationModel build(FireStation fireStation) {
         Set<Person> persons = fireStation.getPersons();
 
         FireStationModel model = new FireStationModel();
         model.setPersons(persons);
-        model.setAdultCount(persons.stream().filter(p -> p.getMedicalRecord().isAdult()).count());
-        model.setChildCount(persons.stream().filter(p -> !p.getMedicalRecord().isAdult()).count());
+        model.setAdultCount(persons.stream().filter(p -> p.getMedicalRecord() != null && p.getMedicalRecord().isAdult()).count());
+        model.setChildCount(persons.stream().filter(p -> p.getMedicalRecord() != null && !p.getMedicalRecord().isAdult()).count());
+        model.setUnknownCount(persons.stream().filter(p -> p.getMedicalRecord() == null).count());
         return model;
     }
 }

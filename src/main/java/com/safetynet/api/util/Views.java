@@ -52,4 +52,7 @@ public class Views {
 
     public interface FloodStationsModel extends FireStationProperties, PersonFirstName, PersonLastName, PersonPhone, PersonAge, PersonMedicalRecord, MedicalRecordProperties {
     }
+
+    public interface PostResultModel {
+    }
 }

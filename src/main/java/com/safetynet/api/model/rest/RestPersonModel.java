@@ -1,4 +1,4 @@
-package com.safetynet.api.model.post;
+package com.safetynet.api.model.rest;
 
 import lombok.*;
 
@@ -6,7 +6,7 @@ import lombok.*;
 @Getter
 @Setter
 @ToString
-public class PostPersonModel {
+public class RestPersonModel {
 
     @NonNull
     private String fireStation;

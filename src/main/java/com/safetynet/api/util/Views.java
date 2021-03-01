@@ -1,6 +1,13 @@
 package com.safetynet.api.util;
 
+/**
+ * Util class used to serialize only certain part of entities
+ */
 public class Views {
+
+    /* ===============
+          Properties
+       ================ */
 
     public interface PersonFirstName {
     }
@@ -37,6 +44,10 @@ public class Views {
 
     public interface MedicalRecordRelations {
     }
+
+    /* ===============
+           Models
+       ================ */
 
     public interface FireStationModel extends PersonFirstName, PersonLastName, PersonAddress, PersonPhone, PersonAge {
     }

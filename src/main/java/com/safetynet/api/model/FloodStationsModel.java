@@ -11,6 +11,9 @@ import lombok.Setter;
 import java.util.*;
 import java.util.stream.Collectors;
 
+/**
+ * The model for the /flood/stations route
+ */
 @NoArgsConstructor
 @Getter
 @Setter
@@ -19,14 +22,23 @@ public class FloodStationsModel {
     @JsonView(Views.FloodStationsModel.class)
     private List<FireStationSubModel> fireStations;
 
+    /**
+     * Build the model from a list of fireStations
+     *
+     * @param fireStations list of FireStations
+     * @return the model
+     */
     public static FloodStationsModel build(Set<FireStation> fireStations) {
         FloodStationsModel model = new FloodStationsModel();
 
         List<FireStationSubModel> subModels = new ArrayList<>();
+        // for each FireStation : build a sub model
         for (FireStation f : fireStations) {
             FireStationSubModel subModel = new FireStationSubModel();
             subModel.setFireStation(f);
+            // groups persons by address
             subModel.setPersonsByAddress(f.getPersons().stream().collect(Collectors.groupingBy(Person::getAddress)));
+            // and add it to the list
             subModels.add(subModel);
         }
 
@@ -34,6 +46,9 @@ public class FloodStationsModel {
         return model;
     }
 
+    /**
+     * Sub model for each FireStation
+     */
     @NoArgsConstructor
     @Setter
     @Getter

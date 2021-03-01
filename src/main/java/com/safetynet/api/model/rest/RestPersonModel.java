@@ -2,6 +2,9 @@ package com.safetynet.api.model.rest;
 
 import lombok.*;
 
+/**
+ * Model for the Person entity : POST PUT
+ */
 @NoArgsConstructor
 @Getter
 @Setter

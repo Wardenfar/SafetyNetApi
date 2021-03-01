@@ -6,6 +6,9 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+/**
+ * The result model for an REST request
+ */
 @NoArgsConstructor
 @Getter
 @Setter
@@ -23,6 +26,9 @@ public class RestResultModel {
     @JsonView(Views.RestResultModel.class)
     String errorMessage;
 
+    /**
+     * Build a success Model
+     */
     public static RestResultModel buildSuccess(String method, String entityClass) {
         RestResultModel model = new RestResultModel();
         model.setMethod(method);
@@ -32,6 +38,9 @@ public class RestResultModel {
         return model;
     }
 
+    /**
+     * Build an error Model
+     */
     public static RestResultModel buildError(String method, String entityClass, String errorMessage) {
         RestResultModel model = new RestResultModel();
         model.setMethod(method);

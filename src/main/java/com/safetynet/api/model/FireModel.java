@@ -10,6 +10,9 @@ import lombok.Setter;
 
 import java.util.Set;
 
+/**
+ * The model for the /fire route
+ */
 @NoArgsConstructor
 @Getter
 @Setter
@@ -21,6 +24,9 @@ public class FireModel {
     @JsonView(Views.FireModel.class)
     Set<Person> persons;
 
+    /**
+     * Build the model from a FireStation
+     */
     public static FireModel build(FireStation fireStation){
         FireModel model = new FireModel();
         model.setFireStation(fireStation);

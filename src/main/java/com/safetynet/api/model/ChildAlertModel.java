@@ -12,6 +12,9 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 
+/**
+ * The model for the /childalert route
+ */
 @NoArgsConstructor
 @Getter
 @Setter
@@ -20,6 +23,9 @@ public class ChildAlertModel {
     @JsonView(Views.ChildAlertModel.class)
     private List<ChildModel> children;
 
+    /**
+     * Sub model for each child
+     */
     @NoArgsConstructor
     @Getter
     @Setter
@@ -30,15 +36,23 @@ public class ChildAlertModel {
         private Set<Person> family;
     }
 
+    /**
+     * Build the model from a list of children and the personRepository
+     */
     public static ChildAlertModel build(Set<Person> children, PersonRepository personRepo) {
         ChildAlertModel model = new ChildAlertModel();
 
         List<ChildModel> childModels = new ArrayList<>();
+        // for each child : build a sub model
         for (Person child : children) {
             ChildModel childModel = new ChildModel();
             childModel.setChild(child);
+
+            // find his family by lastName
             Set<Person> family = personRepo.findAllByLastName(child.getLastName());
+            // remove itself
             family.remove(child);
+
             childModel.setFamily(family);
             childModels.add(childModel);
         }

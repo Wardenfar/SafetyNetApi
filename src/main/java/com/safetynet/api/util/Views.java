@@ -49,4 +49,7 @@ public class Views {
 
     public interface PersonInfoModel extends PersonFirstName, PersonLastName, PersonAddress, PersonAge, PersonEmail, PersonMedicalRecord, MedicalRecordProperties {
     }
+
+    public interface FloodStationsModel extends FireStationProperties, PersonFirstName, PersonLastName, PersonPhone, PersonAge, PersonMedicalRecord, MedicalRecordProperties {
+    }
 }

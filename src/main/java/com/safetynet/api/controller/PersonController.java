@@ -26,8 +26,8 @@ public class PersonController {
     @JsonView(Views.PersonInfoModel.class)
     Person personInfo(@RequestParam String firstName, @RequestParam String lastName) throws EntityNotFound {
         Person person = this.personRepo.findOneByFirstNameAndLastName(firstName, lastName);
-        if(person == null) {
-            throw new EntityNotFound();
+        if (person == null) {
+            throw new EntityNotFound("Person not found by firstName and lastName : " + firstName + " " + lastName);
         }
         return person;
     }

@@ -7,7 +7,7 @@ import java.util.Collections;
 import java.util.HashSet;
 import java.util.Set;
 
-public class MedicalRecordRepository extends AbstractRepository {
+public class MedicalRecordRepository extends AbstractRepository<MedicalRecord> {
 
     private Set<MedicalRecord> medicalRecords = new HashSet<>();
 
@@ -18,6 +18,11 @@ public class MedicalRecordRepository extends AbstractRepository {
     @Override
     public void clear() {
         medicalRecords.clear();
+    }
+
+    @Override
+    public void update(MedicalRecord entity) {
+
     }
 
     public void add(MedicalRecord medicalRecord) {

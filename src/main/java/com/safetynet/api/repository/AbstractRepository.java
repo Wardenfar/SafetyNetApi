@@ -1,8 +1,12 @@
 package com.safetynet.api.repository;
 
-public abstract class AbstractRepository {
+import com.safetynet.api.entity.Person;
+
+public abstract class AbstractRepository<E> {
 
     public abstract int count();
 
     public abstract void clear();
+
+    public abstract void update(E entity);
 }

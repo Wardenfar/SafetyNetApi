@@ -6,7 +6,7 @@ import java.util.Collections;
 import java.util.HashSet;
 import java.util.Set;
 
-public class FireStationRepository extends AbstractRepository {
+public class FireStationRepository extends AbstractRepository<FireStation> {
 
     private Set<FireStation> fireStations = new HashSet<>();
 
@@ -21,6 +21,11 @@ public class FireStationRepository extends AbstractRepository {
     @Override
     public void clear() {
         fireStations.clear();
+    }
+
+    @Override
+    public void update(FireStation entity) {
+
     }
 
     public Set<FireStation> findAll() {

@@ -8,7 +8,7 @@ import java.util.HashSet;
 import java.util.Set;
 import java.util.stream.Collectors;
 
-public class PersonRepository extends AbstractRepository {
+public class PersonRepository extends AbstractRepository<Person> {
 
     private Set<Person> persons = new HashSet<>();
 
@@ -26,6 +26,18 @@ public class PersonRepository extends AbstractRepository {
     @Override
     public void clear() {
         persons.clear();
+    }
+
+    @Override
+    public void update(Person entity) {
+        // Remove previous Person
+        Person prev = findOneByFirstNameAndLastName(entity.getFirstName(), entity.getLastName());
+        prev.getFireStation().remove(prev);
+        persons.remove(prev);
+
+        // Add the new entity
+        persons.add(entity);
+        entity.getFireStation().add(entity);
     }
 
     public Set<Person> findAll() {

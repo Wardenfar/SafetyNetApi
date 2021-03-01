@@ -44,7 +44,7 @@ public class Views {
     public interface ChildAlertModel extends PersonFirstName, PersonLastName, PersonAge {
     }
 
-    public interface FireModel extends PersonFirstName, PersonLastName, PersonPhone, PersonAge, PersonMedicalRecord, MedicalRecordProperties {
+    public interface FireModel extends FireStationProperties, PersonFirstName, PersonLastName, PersonPhone, PersonAge, PersonMedicalRecord, MedicalRecordProperties {
     }
 
     public interface PersonInfoModel extends PersonFirstName, PersonLastName, PersonAddress, PersonAge, PersonEmail, PersonMedicalRecord, MedicalRecordProperties {

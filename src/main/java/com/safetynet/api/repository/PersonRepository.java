@@ -13,8 +13,11 @@ public class PersonRepository extends AbstractRepository<Person> {
     private Set<Person> persons = new HashSet<>();
 
     public void add(Person person) {
+        // the fireStation property is Required
         assert person.getFireStation() != null;
         persons.add(person);
+
+        // Set back reference
         FireStation fireStation = person.getFireStation();
         fireStation.add(person);
     }
@@ -40,28 +43,45 @@ public class PersonRepository extends AbstractRepository<Person> {
         entity.getFireStation().add(entity);
     }
 
+    @Override
+    public void remove(Person entity) {
+
+    }
+
     public Set<Person> findAll() {
         return Collections.unmodifiableSet(persons);
     }
 
+    /**
+     * return one Person by FirstName and LastName
+     */
     public Person findOneByFirstNameAndLastName(String firstName, String lastName) {
         return persons.stream()
                 .filter(p -> p.getFirstName().equals(firstName) && p.getLastName().equals(lastName))
                 .findFirst().orElse(null);
     }
 
+    /**
+     * return all Persons by Address
+     */
     public Set<Person> findAllByAddress(String address) {
         return persons.stream()
                 .filter(p -> p.getAddress().equals(address))
                 .collect(Collectors.toSet());
     }
 
+    /**
+     * return all Persons by LastName
+     */
     public Set<Person> findAllByLastName(String lastName) {
         return persons.stream()
                 .filter(p -> p.getLastName().equals(lastName))
                 .collect(Collectors.toSet());
     }
 
+    /**
+     * return all Persons by City
+     */
     public Set<Person> findAllByCity(String city) {
         return persons.stream()
                 .filter(p -> p.getCity().equals(city))

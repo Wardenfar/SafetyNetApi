@@ -3,6 +3,7 @@ package com.safetynet.api;
 import com.safetynet.api.repository.FireStationRepository;
 import com.safetynet.api.repository.MedicalRecordRepository;
 import com.safetynet.api.repository.PersonRepository;
+import com.safetynet.api.util.DateUtils;
 import com.safetynet.api.util.FeedTestDatabase;
 import org.junit.After;
 import org.junit.Before;
@@ -16,6 +17,7 @@ import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 
+import java.time.LocalDate;
 import java.util.Arrays;
 import java.util.List;
 
@@ -44,6 +46,7 @@ public class CommunityEmailRouteTests {
 
     @Before
     public void beforeEach() {
+        DateUtils.setFakeCurrentDate(LocalDate.of(2021, 1, 1));
         FeedTestDatabase.feedDatabase(personRepo, fireStationRepo, medicalRecordRepo);
     }
 

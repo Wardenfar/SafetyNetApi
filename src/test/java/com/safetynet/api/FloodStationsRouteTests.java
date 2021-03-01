@@ -6,6 +6,7 @@ import com.safetynet.api.entity.Person;
 import com.safetynet.api.repository.FireStationRepository;
 import com.safetynet.api.repository.MedicalRecordRepository;
 import com.safetynet.api.repository.PersonRepository;
+import com.safetynet.api.util.DateUtils;
 import com.safetynet.api.util.FeedTestDatabase;
 import org.junit.After;
 import org.junit.Before;
@@ -21,6 +22,7 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.ResultActions;
 
+import java.time.LocalDate;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -48,6 +50,7 @@ public class FloodStationsRouteTests {
 
     @Before
     public void beforeEach() {
+        DateUtils.setFakeCurrentDate(LocalDate.of(2021, 1, 1));
         FeedTestDatabase.feedDatabase(personRepo, fireStationRepo, medicalRecordRepo);
     }
 
@@ -148,7 +151,7 @@ public class FloodStationsRouteTests {
                     Person person = persons.stream()
                             .filter(p -> p.getFirstName().equals(firstName) && p.getLastName().equals(lastName))
                             .findFirst().orElseThrow();
-                    
+
                     result.andExpect(jsonPath("$.fireStations[" + i + "].personsByAddress['" + address + "'][" + k + "].firstName", is(person.getFirstName())));
                     result.andExpect(jsonPath("$.fireStations[" + i + "].personsByAddress['" + address + "'][" + k + "].lastName", is(person.getLastName())));
                     result.andExpect(jsonPath("$.fireStations[" + i + "].personsByAddress['" + address + "'][" + k + "].age", is(person.ageJson())));

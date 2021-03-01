@@ -17,8 +17,8 @@ import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
-import static org.hamcrest.Matchers.*;
 
+import static org.hamcrest.Matchers.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
@@ -69,10 +69,6 @@ public class PersonInfoRouteTests {
     }
 
     public void makePersonInfoRequestSuccess(Person person) throws Exception {
-
-        String[] allergies = person.getMedicalRecord().getAllergies().toArray(new String[0]);
-        String[] medications = person.getMedicalRecord().getMedications().toArray(new String[0]);
-
         ResultActions result = mvc.perform(
                 get("/personInfo?firstName=" + person.getFirstName() + "&lastName=" + person.getLastName()).contentType(MediaType.APPLICATION_JSON)
         )
@@ -85,19 +81,25 @@ public class PersonInfoRouteTests {
                 .andExpect(jsonPath("$.email", is(person.getEmail())))
                 .andExpect(jsonPath("$.address", is(person.getAddress())))
                 .andExpect(jsonPath("$.zip", is(person.getZip())))
-                .andExpect(jsonPath("$.city", is(person.getCity())))
+                .andExpect(jsonPath("$.city", is(person.getCity())));
 
-                .andExpect(jsonPath("$.medicalRecord").exists())
-                .andExpect(jsonPath("$.medicalRecord.birthdate", is(person.getMedicalRecord().getBirthdate())))
+        if (person.getMedicalRecord() != null) {
+            String[] allergies = person.getMedicalRecord().getAllergies().toArray(new String[0]);
+            String[] medications = person.getMedicalRecord().getMedications().toArray(new String[0]);
 
-                .andExpect(jsonPath("$.medicalRecord.allergies", hasSize(allergies.length)))
-                .andExpect(jsonPath("$.medicalRecord.allergies", containsInAnyOrder(allergies)))
+            result.andExpect(jsonPath("$.medicalRecord").exists());
+            result.andExpect(jsonPath("$.medicalRecord.birthdate", is(person.getMedicalRecord().getBirthdate())));
 
-                .andExpect(jsonPath("$.medicalRecord.medications", hasSize(medications.length)))
-                .andExpect(jsonPath("$.medicalRecord.medications", containsInAnyOrder(medications)))
+            result.andExpect(jsonPath("$.medicalRecord.allergies", hasSize(allergies.length)));
+            result.andExpect(jsonPath("$.medicalRecord.allergies", containsInAnyOrder(allergies)));
 
-                .andExpect(jsonPath("$.medicalRecord.person").doesNotExist())
-                .andExpect(jsonPath("$.fireStation").doesNotExist());
+            result.andExpect(jsonPath("$.medicalRecord.medications", hasSize(medications.length)));
+            result.andExpect(jsonPath("$.medicalRecord.medications", containsInAnyOrder(medications)));
+        } else {
+            result.andExpect(jsonPath("$.medicalRecord").doesNotExist());
+        }
+        result.andExpect(jsonPath("$.medicalRecord.person").doesNotExist());
+        result.andExpect(jsonPath("$.fireStation").doesNotExist());
     }
 
     public void makePersonInfoRequestFail(String firstName, String lastName) throws Exception {

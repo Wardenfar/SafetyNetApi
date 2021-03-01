@@ -49,4 +49,10 @@ public class PersonRepository extends AbstractRepository {
                 .filter(p -> p.getLastName().equals(lastName))
                 .collect(Collectors.toSet());
     }
+
+    public Set<Person> findAllByCity(String city) {
+        return persons.stream()
+                .filter(p -> p.getCity().equals(city))
+                .collect(Collectors.toSet());
+    }
 }

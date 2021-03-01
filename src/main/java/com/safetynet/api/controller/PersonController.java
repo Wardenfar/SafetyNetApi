@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonView;
 import com.safetynet.api.entity.Person;
 import com.safetynet.api.exception.EntityNotFound;
 import com.safetynet.api.model.ChildAlertModel;
+import com.safetynet.api.model.CommunityEmailModel;
 import com.safetynet.api.repository.PersonRepository;
 import com.safetynet.api.util.Views;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -36,5 +37,11 @@ public class PersonController {
     ChildAlertModel childAlert(@RequestParam String address) {
         Set<Person> children = this.personRepo.findAllByAddress(address);
         return ChildAlertModel.build(children, this.personRepo);
+    }
+
+    @GetMapping("/communityEmail")
+    CommunityEmailModel communityEmail(@RequestParam String city) {
+        Set<Person> persons = this.personRepo.findAllByCity(city);
+        return CommunityEmailModel.build(persons);
     }
 }

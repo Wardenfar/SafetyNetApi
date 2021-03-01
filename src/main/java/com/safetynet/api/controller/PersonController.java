@@ -6,8 +6,8 @@ import com.safetynet.api.entity.Person;
 import com.safetynet.api.exception.EntityNotFound;
 import com.safetynet.api.model.ChildAlertModel;
 import com.safetynet.api.model.CommunityEmailModel;
-import com.safetynet.api.model.post.PostPersonModel;
-import com.safetynet.api.model.post.PostResultModel;
+import com.safetynet.api.model.RestResultModel;
+import com.safetynet.api.model.rest.RestPersonModel;
 import com.safetynet.api.repository.FireStationRepository;
 import com.safetynet.api.repository.PersonRepository;
 import com.safetynet.api.util.Views;
@@ -51,13 +51,13 @@ public class PersonController {
     }
 
     @PostMapping("/person")
-    @JsonView(Views.PostResultModel.class)
-    PostResultModel addPerson(@RequestBody PostPersonModel model) {
-        if(model.getFirstName() == null){
-            return PostResultModel.buildError("person", "FirstName should not be null");
+    @JsonView(Views.RestResultModel.class)
+    RestResultModel addPerson(@RequestBody RestPersonModel model) {
+        if (model.getFirstName() == null) {
+            return RestResultModel.buildError("POST", "person", "FirstName should not be null");
         }
-        if(model.getLastName() == null){
-            return PostResultModel.buildError("person", "LastName should not be null");
+        if (model.getLastName() == null) {
+            return RestResultModel.buildError("POST", "person", "LastName should not be null");
         }
 
         Person existing = this.personRepo.findOneByFirstNameAndLastName(model.getFirstName(), model.getLastName());
@@ -67,14 +67,52 @@ public class PersonController {
                 Person toAdd = Person.fromModel(model);
                 toAdd.setFireStation(fireStation);
                 this.personRepo.add(toAdd);
-                return PostResultModel.buildSuccess("person", personRepo.count());
+                return RestResultModel.buildSuccess("POST", "person");
             } catch (Exception e) {
-                return PostResultModel.buildError("person", e.getMessage());
+                return RestResultModel.buildError("POST", "person", e.getMessage());
             }
         } else if (existing != null) {
-            return PostResultModel.buildError("person", "The combination of firstName and lastName should be unique");
+            return RestResultModel.buildError("POST", "person", "The combination of firstName and lastName should be unique");
         } else {
-            return PostResultModel.buildError("person", "The fireStation was not found");
+            return RestResultModel.buildError("POST", "person", "The fireStation was not found");
+        }
+    }
+
+    @PutMapping("/person")
+    @JsonView(Views.RestResultModel.class)
+    RestResultModel updatePerson(@RequestBody RestPersonModel model) {
+        if (model.getFirstName() == null) {
+            return RestResultModel.buildError("PUT", "person", "FirstName should not be null");
+        }
+        if (model.getLastName() == null) {
+            return RestResultModel.buildError("PUT", "person", "LastName should not be null");
+        }
+
+        Person existing = this.personRepo.findOneByFirstNameAndLastName(model.getFirstName(), model.getLastName());
+
+        if (existing != null) {
+            FireStation fireStation = model.getFireStation() != null ?
+                    this.fireStationRepo.findOneByStation(model.getFireStation())
+                    : existing.getFireStation();
+            if (fireStation != null) {
+                try {
+                    Person toUpdate = Person.fromModelAndDefault(model, existing);
+                    toUpdate.setFireStation(fireStation);
+                    if (existing.equals(toUpdate)) {
+                        return RestResultModel.buildError("PUT", "person", "Fail : no change");
+                    }
+
+                    personRepo.update(toUpdate);
+
+                    return RestResultModel.buildSuccess("PUT", "person");
+                } catch (Exception e) {
+                    return RestResultModel.buildError("PUT", "person", e.getMessage());
+                }
+            } else {
+                return RestResultModel.buildError("PUT", "person", "The fireStation was not found");
+            }
+        } else {
+            return RestResultModel.buildError("PUT", "person", "The combination of firstName and lastName was not found");
         }
     }
 }

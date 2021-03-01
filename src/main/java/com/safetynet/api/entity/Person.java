@@ -4,7 +4,7 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonView;
 import com.fasterxml.jackson.databind.JsonNode;
-import com.safetynet.api.model.post.PostPersonModel;
+import com.safetynet.api.model.rest.RestPersonModel;
 import com.safetynet.api.util.Views;
 import lombok.*;
 
@@ -74,7 +74,7 @@ public class Person {
         return p;
     }
 
-    public static Person fromModel(PostPersonModel model) {
+    public static Person fromModel(RestPersonModel model) {
         Person p = new Person();
         p.setFirstName(model.getFirstName());
         p.setLastName(model.getLastName());
@@ -83,13 +83,18 @@ public class Person {
         p.setZip(model.getZip());
         p.setPhone(model.getPhone());
         p.setEmail(model.getEmail());
-//        p.setFirstName(Objects.requireNonNull(model.getFirstName()));
-//        p.setLastName(Objects.requireNonNull(model.getLastName()));
-//        p.setAddress(Objects.requireNonNull(model.getAddress()));
-//        p.setCity(Objects.requireNonNull(model.getCity()));
-//        p.setZip(Objects.requireNonNull(model.getZip()));
-//        p.setPhone(Objects.requireNonNull(model.getPhone()));
-//        p.setEmail(Objects.requireNonNull(model.getEmail()));
+        return p;
+    }
+
+    public static Person fromModelAndDefault(RestPersonModel model, Person defaultObject) {
+        Person p = new Person();
+        p.setFirstName(model.getFirstName() != null ? model.getFirstName() : defaultObject.getFirstName());
+        p.setLastName(model.getLastName() != null ? model.getLastName() : defaultObject.getLastName());
+        p.setAddress(model.getAddress() != null ? model.getAddress() : defaultObject.getAddress());
+        p.setCity(model.getCity() != null ? model.getCity() : defaultObject.getCity());
+        p.setZip(model.getZip() != null ? model.getZip() : defaultObject.getZip());
+        p.setPhone(model.getPhone() != null ? model.getPhone() : defaultObject.getPhone());
+        p.setEmail(model.getEmail() != null ? model.getEmail() : defaultObject.getEmail());
         return p;
     }
 }

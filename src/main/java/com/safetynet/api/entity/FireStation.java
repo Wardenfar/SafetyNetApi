@@ -38,4 +38,8 @@ public class FireStation {
     public void add(Person person) {
         persons.add(person);
     }
+
+    public void remove(Person person) {
+        persons.remove(person);
+    }
 }

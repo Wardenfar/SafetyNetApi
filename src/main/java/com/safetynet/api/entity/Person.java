@@ -8,6 +8,9 @@ import com.safetynet.api.model.rest.RestPersonModel;
 import com.safetynet.api.util.Views;
 import lombok.*;
 
+/**
+ * The Person entity
+ */
 @NoArgsConstructor
 @RequiredArgsConstructor
 @Getter
@@ -52,6 +55,11 @@ public class Person {
     @JsonView({Views.PersonMedicalRecord.class})
     private MedicalRecord medicalRecord;
 
+    /**
+     * Dynamic Json property
+     *
+     * @return the age from the medicalRecord
+     */
     @JsonView({Views.PersonAge.class})
     @JsonProperty(value = "age", access = JsonProperty.Access.READ_ONLY)
     public String ageJson() {
@@ -62,6 +70,12 @@ public class Person {
         }
     }
 
+    /**
+     * Build an entity from the json extracted from the data source
+     *
+     * @param json json node
+     * @return the person
+     */
     public static Person fromJson(JsonNode json) {
         Person p = new Person();
         p.setFirstName(json.get("firstName").asText());
@@ -74,6 +88,9 @@ public class Person {
         return p;
     }
 
+    /**
+     * Build an entity from RestPersonModel
+     */
     public static Person fromModel(RestPersonModel model) {
         Person p = new Person();
         p.setFirstName(model.getFirstName());
@@ -86,6 +103,9 @@ public class Person {
         return p;
     }
 
+    /**
+     * Build an entity from RestPersonModel with default
+     */
     public static Person fromModelAndDefault(RestPersonModel model, Person defaultObject) {
         Person p = new Person();
         p.setFirstName(model.getFirstName() != null ? model.getFirstName() : defaultObject.getFirstName());

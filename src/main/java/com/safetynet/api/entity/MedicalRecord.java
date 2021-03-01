@@ -9,6 +9,9 @@ import lombok.*;
 
 import java.util.List;
 
+/**
+ * the MedicalRecord Entity
+ */
 @NoArgsConstructor
 @RequiredArgsConstructor
 @Getter
@@ -34,14 +37,26 @@ public class MedicalRecord {
     @ToString.Exclude
     private Person person;
 
+    /**
+     * Calculate the age from the birthday data
+     */
     public int age() {
         return DateUtils.ageInYears(DateUtils.parseDate(birthdate));
     }
 
+    /**
+     * Return true if age() >= 18
+     */
     public boolean isAdult() {
         return DateUtils.ageInYears(DateUtils.parseDate(birthdate)) >= 18;
     }
 
+    /**
+     * Build an entity from the json extracted from the data source
+     *
+     * @param json json node
+     * @return the medicalRecord
+     */
     public static MedicalRecord fromJson(JsonNode json) {
         MedicalRecord medicalRecord = new MedicalRecord();
         medicalRecord.setBirthdate(json.get("birthdate").asText());

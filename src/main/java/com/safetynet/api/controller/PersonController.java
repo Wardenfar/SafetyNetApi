@@ -7,6 +7,7 @@ import com.safetynet.api.exception.EntityNotFound;
 import com.safetynet.api.model.ChildAlertModel;
 import com.safetynet.api.model.CommunityEmailModel;
 import com.safetynet.api.model.RestResultModel;
+import com.safetynet.api.model.delete.DeletePersonModel;
 import com.safetynet.api.model.rest.RestPersonModel;
 import com.safetynet.api.repository.FireStationRepository;
 import com.safetynet.api.repository.PersonRepository;
@@ -34,7 +35,7 @@ public class PersonController {
 
     /**
      * GET /personInfo?firstName=?&lastName=?
-     *
+     * <p>
      * Return information about this person
      */
     @GetMapping("/personInfo")
@@ -51,7 +52,7 @@ public class PersonController {
 
     /**
      * GET /childAlert?address=?
-     *
+     * <p>
      * Return all children of this address
      */
     @GetMapping("/childAlert")
@@ -65,7 +66,7 @@ public class PersonController {
 
     /**
      * GET /communityEmail?city=?
-     *
+     * <p>
      * Return all person's email from a given city
      */
     @GetMapping("/communityEmail")
@@ -78,10 +79,10 @@ public class PersonController {
 
     /**
      * Create a person and link it with a fireStation
-     *
+     * <p>
      * POST /person
      * Json body
-     *
+     * <p>
      * All parameters are required @see RestPersonModel
      */
     @PostMapping("/person")
@@ -128,10 +129,10 @@ public class PersonController {
 
     /**
      * Update a person by it's firstName and lastName
-     *
+     * <p>
      * PUT /person
      * Json body
-     *
+     * <p>
      * Two required parameters : firstName, lastName
      * All others are the same as for POST but they are optional
      */
@@ -186,6 +187,39 @@ public class PersonController {
         } else {
             // else Throw an error
             return RestResultModel.buildError("PUT", "person", "The combination of firstName and lastName was not found");
+        }
+    }
+
+    /**
+     * Update a person by it's firstName and lastName
+     * <p>
+     * PUT /person
+     * Json body
+     * <p>
+     * Two required parameters : firstName, lastName
+     * All others are the same as for POST but they are optional
+     */
+    @DeleteMapping("/person")
+    @JsonView(Views.RestResultModel.class)
+    RestResultModel updatePerson(@RequestBody DeletePersonModel model) {
+        // Check required parameters (firstName)
+        if (model.getFirstName() == null) {
+            return RestResultModel.buildError("DELETE", "person", "FirstName should not be null");
+        }
+        // Check required parameters (lastName)
+        if (model.getLastName() == null) {
+            return RestResultModel.buildError("DELETE", "person", "LastName should not be null");
+        }
+
+        // fetch the person
+        Person existing = personRepo.findOneByFirstNameAndLastName(model.getFirstName(), model.getLastName());
+        if (existing != null) {
+            // if the person was found
+            personRepo.remove(existing);
+            return RestResultModel.buildSuccess("DELETE", "person");
+        } else {
+            // the person was not found : error
+            return RestResultModel.buildError("DELETE", "person", "The person does not exists");
         }
     }
 }

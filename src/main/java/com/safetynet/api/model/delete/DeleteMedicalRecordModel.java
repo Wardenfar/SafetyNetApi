@@ -10,8 +10,9 @@ import lombok.*;
 @Getter
 @Setter
 @ToString
-public class DeleteFireStationModel {
-
-    private String station;
+public class DeleteMedicalRecordModel {
+    
+    private String firstName;
+    private String lastName;
 
 }

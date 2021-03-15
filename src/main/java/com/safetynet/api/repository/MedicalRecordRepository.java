@@ -27,18 +27,52 @@ public class MedicalRecordRepository extends AbstractRepository<MedicalRecord> {
 
     @Override
     public boolean update(MedicalRecord entity) {
-        return false;
+        if(entity.getPerson() == null){
+            return false;
+        }
+
+        MedicalRecord prev = findOneByPerson(entity.getPerson());
+
+        // Prev does not exists
+        if(prev == null){
+            return false;
+        }
+
+        // The person has been updated
+        if(!entity.getPerson().equals(prev.getPerson())){
+            return false;
+        }
+
+        medicalRecords.remove(prev);
+        entity.getPerson().setMedicalRecord(entity);
+        medicalRecords.add(entity);
+
+        return true;
     }
 
     @Override
     public boolean remove(MedicalRecord entity) {
-        return false;
+        medicalRecords.remove(entity);
+        if(entity.getPerson() != null){
+            entity.setPerson(null);
+        }
+        return true;
     }
 
     @Override
     public boolean add(MedicalRecord medicalRecord) {
         // The person property is required
-        assert medicalRecord.getPerson() != null;
+        if (medicalRecord.getPerson() == null) {
+            return false;
+        }
+        // The person has already a Medical Record
+        if (medicalRecord.getPerson().getMedicalRecord() != null && medicalRecord.getPerson().getMedicalRecord() != medicalRecord) {
+            return false;
+        }
+
+        // Set back-reference
+        medicalRecord.getPerson().setMedicalRecord(medicalRecord);
+
         medicalRecords.add(medicalRecord);
 
         // Set back reference
@@ -47,10 +81,26 @@ public class MedicalRecordRepository extends AbstractRepository<MedicalRecord> {
         return true;
     }
 
+    public MedicalRecord findOneByFirstNameAndLastName(String firstName, String lastName) {
+        return medicalRecords.stream().filter(m ->
+                m.getPerson().getFirstName().equals(firstName)
+                        && m.getPerson().getLastName().equals(lastName))
+                .findFirst()
+                .orElse(null);
+    }
+
+    public MedicalRecord findOneByPerson(Person person) {
+        return medicalRecords.stream().filter(m ->
+                m.getPerson().equals(person))
+                .findFirst()
+                .orElse(null);
+    }
+
     /**
      * return all MedicalRecord in this repository
      */
     public Set<MedicalRecord> findAll() {
         return Collections.unmodifiableSet(medicalRecords);
     }
+
 }

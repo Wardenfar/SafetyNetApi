@@ -156,7 +156,7 @@ public class FireStationController {
      */
     @PutMapping("/firestation")
     @JsonView(Views.RestResultModel.class)
-    RestResultModel updateFireStation(@RequestBody RestFireStationModel model) {
+    RestResultModel deleteFireStation(@RequestBody RestFireStationModel model) {
         // Check required parameters (station)
         if (model.getStation() == null) {
             return RestResultModel.buildError("PUT", "fireStation", "Station Number should not be null");
@@ -204,7 +204,7 @@ public class FireStationController {
      */
     @DeleteMapping("/firestation")
     @JsonView(Views.RestResultModel.class)
-    RestResultModel updateFireStation(@RequestBody DeleteFireStationModel model) {
+    RestResultModel deleteFireStation(@RequestBody DeleteFireStationModel model) {
         // Check required parameters (station)
         if (model.getStation() == null) {
             return RestResultModel.buildError("DELETE", "fireStation", "Station Number should not be null");

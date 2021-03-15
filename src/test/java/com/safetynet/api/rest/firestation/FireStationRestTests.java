@@ -82,6 +82,13 @@ public class FireStationRestTests {
     }
 
     @Test
+    public void postFireStationFail_station_null() throws Exception {
+        RestFireStationModel model = new RestFireStationModel(null, "50 rue la Paix");
+
+        postFireStationFail(mvc, fireStationRepo, model);
+    }
+
+    @Test
     public void putFireStation() throws Exception {
         RestFireStationModel model1 = new RestFireStationModel("1", "new address");
         RestFireStationModel model2 = new RestFireStationModel("2", "new address");
@@ -94,9 +101,11 @@ public class FireStationRestTests {
     public void putFireStationFail_notExist() throws Exception {
         RestFireStationModel model1 = new RestFireStationModel("9", "new address");
         RestFireStationModel model2 = new RestFireStationModel("-1", "new address");
+        RestFireStationModel model3 = new RestFireStationModel(null, "new address");
 
         putFireStationFail(mvc, fireStationRepo, model1);
         putFireStationFail(mvc, fireStationRepo, model2);
+        putFireStationFail(mvc, fireStationRepo, model3);
     }
 
     @Test
@@ -124,5 +133,12 @@ public class FireStationRestTests {
 
         deleteFireStationFail(mvc, fireStationRepo, model1);
         deleteFireStationFail(mvc, fireStationRepo, model2);
+    }
+
+    @Test
+    public void deleteFireStationFail_station_null() throws Exception {
+        DeleteFireStationModel model = new DeleteFireStationModel(null);
+
+        deleteFireStationFail(mvc, fireStationRepo, model);
     }
 }

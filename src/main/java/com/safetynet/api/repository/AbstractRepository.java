@@ -19,16 +19,19 @@ public abstract class AbstractRepository<E> {
 
     /**
      * Add an entity
+     * @return
      */
-    public abstract void add(E entity);
+    public abstract boolean add(E entity);
 
     /**
      * Update an entity
+     * @return
      */
-    public abstract void update(E entity);
+    public abstract boolean update(E entity);
 
     /**
      * Remove an entity
+     * @return
      */
-    public abstract void remove(E entity);
+    public abstract boolean remove(E entity);
 }

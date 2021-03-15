@@ -27,7 +27,8 @@ public class PersonRestUtil {
         )
                 .andExpect(status().isOk())
                 .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
-                .andExpect(jsonPath("$.success", is(true)));
+                .andExpect(jsonPath("$.success", is(true)))
+                .andExpect(jsonPath("$.method", is("POST")));
 
         int countAfter = personRepo.count();
 
@@ -49,7 +50,8 @@ public class PersonRestUtil {
         )
                 .andExpect(status().isOk())
                 .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
-                .andExpect(jsonPath("$.success", is(true)));
+                .andExpect(jsonPath("$.success", is(true)))
+                .andExpect(jsonPath("$.method", is("PUT")));
 
         int countAfter = personRepo.count();
 
@@ -73,7 +75,8 @@ public class PersonRestUtil {
         )
                 .andExpect(status().isOk())
                 .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
-                .andExpect(jsonPath("$.success", is(true)));
+                .andExpect(jsonPath("$.success", is(true)))
+                .andExpect(jsonPath("$.method", is("DELETE")));
 
         int countAfter = personRepo.count();
         assert countBefore - 1 == countAfter;
@@ -91,7 +94,8 @@ public class PersonRestUtil {
         )
                 .andExpect(status().isOk())
                 .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
-                .andExpect(jsonPath("$.success", is(false)));
+                .andExpect(jsonPath("$.success", is(false)))
+                .andExpect(jsonPath("$.method", is("DELETE")));
 
         int countAfter = personRepo.count();
         assert countBefore == countAfter;
@@ -110,7 +114,8 @@ public class PersonRestUtil {
         )
                 .andExpect(status().isOk())
                 .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
-                .andExpect(jsonPath("$.success", is(false)));
+                .andExpect(jsonPath("$.success", is(false)))
+                .andExpect(jsonPath("$.method", is("PUT")));
 
         int countAfter = personRepo.count();
 
@@ -183,7 +188,8 @@ public class PersonRestUtil {
         )
                 .andExpect(status().isOk())
                 .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
-                .andExpect(jsonPath("$.success", is(false)));
+                .andExpect(jsonPath("$.success", is(false)))
+                .andExpect(jsonPath("$.method", is("POST")));
 
         int countAfter = personRepo.count();
 

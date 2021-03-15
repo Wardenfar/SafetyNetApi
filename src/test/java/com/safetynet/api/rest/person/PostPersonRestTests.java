@@ -154,18 +154,19 @@ public class PostPersonRestTests {
 
     @Test
     public void deletePerson() throws Exception {
-        DeletePersonModel model1 = new DeletePersonModel("Test1", "Example");
-        DeletePersonModel model2 = new DeletePersonModel("Test2", "Example");
-        DeletePersonModel model3 = new DeletePersonModel("Pierre", "Paul");
-
+        DeletePersonModel model1 = new DeletePersonModel("Test3", "Example");
         deletePersonSuccess(mvc, personRepo, model1);
-        deletePersonSuccess(mvc, personRepo, model2);
-        deletePersonSuccess(mvc, personRepo, model3);
+    }
+
+    @Test
+    public void deletePersonFail_MedicalRecord_notNull() throws Exception {
+        DeletePersonModel model1 = new DeletePersonModel("Test1", "Example");
+        deletePersonFail(mvc, personRepo, model1);
     }
 
     @Test
     public void deletePersonFail_notExist1() throws Exception {
-        DeletePersonModel model = new DeletePersonModel("Test1", "Example");
+        DeletePersonModel model = new DeletePersonModel("Test3", "Example");
         deletePersonSuccess(mvc, personRepo, model);
         deletePersonFail(mvc, personRepo, model);
     }

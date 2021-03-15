@@ -20,8 +20,9 @@ public class FireStationRepository extends AbstractRepository<FireStation> {
      * @param fireStation toAdd
      */
     @Override
-    public void add(FireStation fireStation) {
+    public boolean add(FireStation fireStation) {
         fireStations.add(fireStation);
+        return true;
     }
 
     /**
@@ -44,16 +45,29 @@ public class FireStationRepository extends AbstractRepository<FireStation> {
      * Update an entity
      */
     @Override
-    public void update(FireStation entity) {
+    public boolean update(FireStation entity) {
+        // Remove previous
+        FireStation prev = findOneByStation(entity.getStation());
+        fireStations.remove(prev);
 
+        // Set persons
+        entity.setPersons(prev.getPersons());
+
+        // Add the updated Entity
+        fireStations.add(entity);
+        return add(entity);
     }
 
     /**
      * Remove an entity
      */
     @Override
-    public void remove(FireStation entity) {
-
+    public boolean remove(FireStation entity) {
+        if(entity.getPersons().size() > 0){
+            return false;
+        }
+        fireStations.remove(entity);
+        return true;
     }
 
     /**

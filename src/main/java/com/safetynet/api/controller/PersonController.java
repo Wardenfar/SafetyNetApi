@@ -110,10 +110,12 @@ public class PersonController {
                 toAdd.setFireStation(fireStation);
 
                 // add it to the repository
-                this.personRepo.add(toAdd);
-
-                // success
-                return RestResultModel.buildSuccess("POST", "person");
+                boolean success = this.personRepo.add(toAdd);
+                if (success) {
+                    return RestResultModel.buildSuccess("POST", "person");
+                } else {
+                    return RestResultModel.buildError("POST", "person", "Error when adding");
+                }
             } catch (Exception e) {
                 // Catch NullPointerExceptions (if a property is null)
                 return RestResultModel.buildError("POST", "person", e.getMessage());
@@ -138,7 +140,7 @@ public class PersonController {
      */
     @PutMapping("/person")
     @JsonView(Views.RestResultModel.class)
-    RestResultModel updatePerson(@RequestBody RestPersonModel model) {
+    RestResultModel deletePerson(@RequestBody RestPersonModel model) {
         // Check required parameters (firstName)
         if (model.getFirstName() == null) {
             return RestResultModel.buildError("PUT", "person", "FirstName should not be null");
@@ -172,10 +174,13 @@ public class PersonController {
                     toUpdate.setFireStation(fireStation);
                     toUpdate.setMedicalRecord(existing.getMedicalRecord());
 
-                    personRepo.update(toUpdate);
+                    boolean success = personRepo.update(toUpdate);
 
-                    // success
-                    return RestResultModel.buildSuccess("PUT", "person");
+                    if (success) {
+                        return RestResultModel.buildSuccess("PUT", "person");
+                    } else {
+                        return RestResultModel.buildError("PUT", "person", "Error when updating");
+                    }
                 } catch (Exception e) {
                     // Throw an error
                     return RestResultModel.buildError("PUT", "person", e.getMessage());
@@ -201,7 +206,7 @@ public class PersonController {
      */
     @DeleteMapping("/person")
     @JsonView(Views.RestResultModel.class)
-    RestResultModel updatePerson(@RequestBody DeletePersonModel model) {
+    RestResultModel deletePerson(@RequestBody DeletePersonModel model) {
         // Check required parameters (firstName)
         if (model.getFirstName() == null) {
             return RestResultModel.buildError("DELETE", "person", "FirstName should not be null");
@@ -215,8 +220,12 @@ public class PersonController {
         Person existing = personRepo.findOneByFirstNameAndLastName(model.getFirstName(), model.getLastName());
         if (existing != null) {
             // if the person was found
-            personRepo.remove(existing);
-            return RestResultModel.buildSuccess("DELETE", "person");
+            boolean success = personRepo.remove(existing);
+            if (success) {
+                return RestResultModel.buildSuccess("DELETE", "person");
+            } else {
+                return RestResultModel.buildError("DELETE", "person", "Error when removing");
+            }
         } else {
             // the person was not found : error
             return RestResultModel.buildError("DELETE", "person", "The person does not exists");

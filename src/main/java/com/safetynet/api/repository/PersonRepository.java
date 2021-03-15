@@ -13,14 +13,19 @@ public class PersonRepository extends AbstractRepository<Person> {
     private Set<Person> persons = new HashSet<>();
 
     @Override
-    public void add(Person person) {
+    public boolean add(Person person) {
         // the fireStation property is Required
-        assert person.getFireStation() != null;
+        if (person.getFireStation() == null) {
+            return false;
+        }
+
         persons.add(person);
 
         // Set back reference
         FireStation fireStation = person.getFireStation();
         fireStation.addPerson(person);
+
+        return true;
     }
 
     @Override
@@ -34,16 +39,32 @@ public class PersonRepository extends AbstractRepository<Person> {
     }
 
     @Override
-    public void update(Person entity) {
+    public boolean update(Person entity) {
+        // Checks not null
+        if (entity.getFireStation() == null) {
+            return false;
+        }
+
+        // Remove the old
         Person prev = findOneByFirstNameAndLastName(entity.getFirstName(), entity.getLastName());
-        remove(prev);
-        add(entity);
+        prev.getFireStation().removePerson(prev);
+        persons.remove(prev);
+
+        // Add the new entity
+        persons.add(entity);
+        FireStation fireStation = entity.getFireStation();
+        fireStation.addPerson(entity);
+        return true;
     }
 
     @Override
-    public void remove(Person entity) {
+    public boolean remove(Person entity) {
+        if (entity.getMedicalRecord() != null) {
+            return false;
+        }
         entity.getFireStation().removePerson(entity);
         persons.remove(entity);
+        return true;
     }
 
     public Set<Person> findAll() {

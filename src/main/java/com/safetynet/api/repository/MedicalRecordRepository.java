@@ -26,17 +26,17 @@ public class MedicalRecordRepository extends AbstractRepository<MedicalRecord> {
     }
 
     @Override
-    public void update(MedicalRecord entity) {
-
+    public boolean update(MedicalRecord entity) {
+        return false;
     }
 
     @Override
-    public void remove(MedicalRecord entity) {
-
+    public boolean remove(MedicalRecord entity) {
+        return false;
     }
 
     @Override
-    public void add(MedicalRecord medicalRecord) {
+    public boolean add(MedicalRecord medicalRecord) {
         // The person property is required
         assert medicalRecord.getPerson() != null;
         medicalRecords.add(medicalRecord);
@@ -44,6 +44,7 @@ public class MedicalRecordRepository extends AbstractRepository<MedicalRecord> {
         // Set back reference
         Person person = medicalRecord.getPerson();
         person.setMedicalRecord(medicalRecord);
+        return true;
     }
 
     /**

@@ -2,6 +2,8 @@ package com.safetynet.api.entity;
 
 import com.fasterxml.jackson.annotation.JsonView;
 import com.fasterxml.jackson.databind.JsonNode;
+import com.safetynet.api.model.rest.RestFireStationModel;
+import com.safetynet.api.model.rest.RestPersonModel;
 import com.safetynet.api.util.Views;
 import lombok.*;
 
@@ -58,5 +60,34 @@ public class FireStation {
      */
     public void removePerson(Person person) {
         persons.remove(person);
+    }
+
+    /**
+     * Build an entity from RestFireStationModel
+     */
+    public static FireStation fromModel(RestFireStationModel model) {
+        FireStation fs = new FireStation();
+        fs.setStation(model.getStation());
+        fs.setAddress(model.getAddress());
+        return fs;
+    }
+
+    /**
+     * Build an entity from RestFireStationModel with default
+     */
+    public static FireStation fromModelAndDefault(RestFireStationModel model, FireStation defaultObject) {
+        FireStation fs = new FireStation();
+        fs.setStation(model.getStation() != null ? model.getStation() : defaultObject.getStation());
+        fs.setAddress(model.getAddress() != null ? model.getAddress() : defaultObject.getAddress());
+        return fs;
+    }
+
+    @Override
+    public FireStation clone(){
+        FireStation result = new FireStation();
+        result.setStation(station);
+        result.setAddress(address);
+        result.setPersons(persons);
+        return result;
     }
 }

@@ -16,6 +16,7 @@ public class FeedTestDatabase {
         FireStation fs1 = createFireStation(fireStationRepo, "1", "506 rue Losange");
         FireStation fs2 = createFireStation(fireStationRepo, "2", "102 rue Triangle");
         FireStation fs3 = createFireStation(fireStationRepo, "3", "51 rue Rectangle");
+        FireStation fs4 = createFireStation(fireStationRepo, "4", "21 rue Droite");
 
         Person p1 = createPerson(personRepo, fs1, "Test1", "Example", "506 rue Losange", "Paris", "75001", "001-001", "test1@gmail.com");
         MedicalRecord mr1 = createMedicalRecord(medicalRecordRepo, p1, "01/25/1956", Arrays.asList("cepes"), Arrays.asList("paracetamol"));
@@ -31,7 +32,7 @@ public class FeedTestDatabase {
         Person p6 = createPerson(personRepo, fs2, "Henri", "Paul", "102 rue Triangle", "Lyon", "99999", "002-002", "mail3@gmail.com");
         MedicalRecord mr6 = createMedicalRecord(medicalRecordRepo, p6, "01/25/1951", Arrays.asList("pizza"), Arrays.asList("doliprane"));
 
-        assert fireStationRepo.count() == 3;
+        assert fireStationRepo.count() == 4;
         assert personRepo.count() == 6;
         assert medicalRecordRepo.count() == 5;
     }

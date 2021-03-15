@@ -164,6 +164,8 @@ public class PersonRestUtil {
         } else {
             assert after.getFireStation().getStation().equals(model.getFireStation());
         }
+
+        assert before.getMedicalRecord().equals(after.getMedicalRecord());
     }
 
     private static void verifyNewPerson(PersonRepository personRepo, RestPersonModel model) {
@@ -174,6 +176,7 @@ public class PersonRestUtil {
         assert person.getPhone().equals(model.getPhone());
         assert person.getEmail().equals(model.getEmail());
         assert person.getFireStation().getStation().equals(model.getFireStation());
+        assert person.getMedicalRecord() == null;
     }
 
     public static void postPersonFail(MockMvc mvc, PersonRepository personRepo, RestPersonModel model) throws Exception {

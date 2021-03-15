@@ -1,9 +1,6 @@
 package com.safetynet.api.rest.person;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.ObjectWriter;
 import com.safetynet.api.ApiApplication;
-import com.safetynet.api.entity.Person;
 import com.safetynet.api.model.delete.DeletePersonModel;
 import com.safetynet.api.model.rest.RestPersonModel;
 import com.safetynet.api.repository.FireStationRepository;
@@ -18,7 +15,6 @@ import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.http.MediaType;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
@@ -26,15 +22,12 @@ import org.springframework.test.web.servlet.MockMvc;
 import java.time.LocalDate;
 
 import static com.safetynet.api.rest.person.PersonRestUtil.*;
-import static org.hamcrest.Matchers.is;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest(classes = ApiApplication.class)
 @AutoConfigureMockMvc
 @ActiveProfiles("test")
-public class PostPersonRestTests {
+public class PersonRestTests {
 
     @Autowired
     private MockMvc mvc;

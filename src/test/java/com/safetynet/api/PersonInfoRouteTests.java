@@ -77,16 +77,26 @@ public class PersonInfoRouteTests {
                 get("/personInfo?firstName=" + person.getFirstName() + "&lastName=" + person.getLastName()).contentType(MediaType.APPLICATION_JSON)
         )
                 .andExpect(status().isOk())
-                .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
+                .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON));
 
-                .andExpect(jsonPath("$.firstName", is(person.getFirstName())))
-                .andExpect(jsonPath("$.lastName", is(person.getLastName())))
-                .andExpect(jsonPath("$.age", is(person.ageJson())))
-                .andExpect(jsonPath("$.email", is(person.getEmail())))
-                .andExpect(jsonPath("$.address", is(person.getAddress())))
-                .andExpect(jsonPath("$.zip", is(person.getZip())))
-                .andExpect(jsonPath("$.city", is(person.getCity())));
+        verifyPerson(person, result);
+        verifyMedicalRecord(person, result);
 
+        result.andExpect(jsonPath("$.medicalRecord.person").doesNotExist());
+        result.andExpect(jsonPath("$.fireStation").doesNotExist());
+    }
+
+    private void verifyPerson(Person person, ResultActions result) throws Exception {
+        result.andExpect(jsonPath("$.firstName", is(person.getFirstName())));
+        result.andExpect(jsonPath("$.lastName", is(person.getLastName())));
+        result.andExpect(jsonPath("$.age", is(person.ageJson())));
+        result.andExpect(jsonPath("$.email", is(person.getEmail())));
+        result.andExpect(jsonPath("$.address", is(person.getAddress())));
+        result.andExpect(jsonPath("$.zip", is(person.getZip())));
+        result.andExpect(jsonPath("$.city", is(person.getCity())));
+    }
+
+    private void verifyMedicalRecord(Person person, ResultActions result) throws Exception {
         if (person.getMedicalRecord() != null) {
             String[] allergies = person.getMedicalRecord().getAllergies().toArray(new String[0]);
             String[] medications = person.getMedicalRecord().getMedications().toArray(new String[0]);
@@ -102,8 +112,6 @@ public class PersonInfoRouteTests {
         } else {
             result.andExpect(jsonPath("$.medicalRecord").doesNotExist());
         }
-        result.andExpect(jsonPath("$.medicalRecord.person").doesNotExist());
-        result.andExpect(jsonPath("$.fireStation").doesNotExist());
     }
 
     public void makePersonInfoRequestFail(String firstName, String lastName) throws Exception {

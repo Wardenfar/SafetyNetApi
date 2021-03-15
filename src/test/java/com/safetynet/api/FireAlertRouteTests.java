@@ -110,6 +110,10 @@ public class FireAlertRouteTests {
         result.andExpect(jsonPath("$.fireStation.station", is(fireStation.getStation())));
         result.andExpect(jsonPath("$.fireStation.address", is(fireStation.getAddress())));
 
+        verifyPersons(persons, result, response);
+    }
+
+    private void verifyPersons(List<Person> persons, ResultActions result, MvcResult response) throws Exception {
         for (int i = 0; i < persons.size(); i++) {
 
             String firstName = JsonPath.read(response.getResponse().getContentAsString(), "$.persons[" + i + "].firstName");
@@ -124,20 +128,24 @@ public class FireAlertRouteTests {
             result.andExpect(jsonPath("$.persons[" + i + "].age", is(person.ageJson())));
             result.andExpect(jsonPath("$.persons[" + i + "].phone", is(person.getPhone())));
 
-            if (person.getMedicalRecord() != null) {
-                String[] allergies = person.getMedicalRecord().getAllergies().toArray(new String[0]);
-                String[] medications = person.getMedicalRecord().getMedications().toArray(new String[0]);
-                result.andExpect(jsonPath("$.persons[" + i + "].medicalRecord").exists());
-                result.andExpect(jsonPath("$.persons[" + i + "].medicalRecord.birthdate", is(person.getMedicalRecord().getBirthdate())));
+            verifyMedicalRecord(result, i, person);
+        }
+    }
 
-                result.andExpect(jsonPath("$.persons[" + i + "].medicalRecord.allergies", hasSize(allergies.length)));
-                result.andExpect(jsonPath("$.persons[" + i + "].medicalRecord.allergies", containsInAnyOrder(allergies)));
+    private void verifyMedicalRecord(ResultActions result, int i, Person person) throws Exception {
+        if (person.getMedicalRecord() != null) {
+            String[] allergies = person.getMedicalRecord().getAllergies().toArray(new String[0]);
+            String[] medications = person.getMedicalRecord().getMedications().toArray(new String[0]);
+            result.andExpect(jsonPath("$.persons[" + i + "].medicalRecord").exists());
+            result.andExpect(jsonPath("$.persons[" + i + "].medicalRecord.birthdate", is(person.getMedicalRecord().getBirthdate())));
 
-                result.andExpect(jsonPath("$.persons[" + i + "].medicalRecord.medications", hasSize(medications.length)));
-                result.andExpect(jsonPath("$.persons[" + i + "].medicalRecord.medications", containsInAnyOrder(medications)));
-            }else{
-                result.andExpect(jsonPath("$.persons[" + i + "].medicalRecord").doesNotExist());
-            }
+            result.andExpect(jsonPath("$.persons[" + i + "].medicalRecord.allergies", hasSize(allergies.length)));
+            result.andExpect(jsonPath("$.persons[" + i + "].medicalRecord.allergies", containsInAnyOrder(allergies)));
+
+            result.andExpect(jsonPath("$.persons[" + i + "].medicalRecord.medications", hasSize(medications.length)));
+            result.andExpect(jsonPath("$.persons[" + i + "].medicalRecord.medications", containsInAnyOrder(medications)));
+        }else{
+            result.andExpect(jsonPath("$.persons[" + i + "].medicalRecord").doesNotExist());
         }
     }
 

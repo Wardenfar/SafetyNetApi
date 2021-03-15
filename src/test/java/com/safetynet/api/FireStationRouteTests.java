@@ -99,6 +99,10 @@ public class FireStationRouteTests {
 
         MvcResult response = result.andReturn();
 
+        verifyPersons(persons, result, response);
+    }
+
+    private void verifyPersons(List<Person> persons, ResultActions result, MvcResult response) throws Exception {
         for (int i = 0; i < persons.size(); i++) {
 
             String firstName = JsonPath.read(response.getResponse().getContentAsString(), "$.persons[" + i + "].firstName");

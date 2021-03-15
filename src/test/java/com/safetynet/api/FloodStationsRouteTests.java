@@ -129,6 +129,10 @@ public class FloodStationsRouteTests {
 
         result.andExpect(jsonPath("$.fireStations", hasSize(fireStations.size())));
 
+        verifyFireStations(fireStations, result, response);
+    }
+
+    private void verifyFireStations(Map<FireStation, Map<String, List<Person>>> fireStations, ResultActions result, MvcResult response) throws Exception {
         for (int i = 0; i < fireStations.size(); i++) {
             String station = JsonPath.read(response.getResponse().getContentAsString(), "$.fireStations[" + i + "].fireStation.station");
             FireStation fireStation = fireStations.keySet().stream().filter(fs -> fs.getStation().equals(station)).findFirst().orElseThrow();
@@ -137,42 +141,55 @@ public class FloodStationsRouteTests {
             result.andExpect(jsonPath("$.fireStations[" + i + "].fireStation.address", is(fireStation.getAddress())));
             result.andExpect(jsonPath("$.fireStations[" + i + "].personsByAddress.*", hasSize(personsByAddress.size())));
 
-            for (Map.Entry<String, List<Person>> entry : personsByAddress.entrySet()) {
-                String address = entry.getKey();
-                List<Person> persons = entry.getValue();
+            verifyPersonsByAddress(result, response, i, personsByAddress);
+        }
+    }
 
-                result.andExpect(jsonPath("$.fireStations[" + i + "].personsByAddress['" + address + "']", hasSize(persons.size())));
+    private void verifyPersonsByAddress(ResultActions result, MvcResult response, int i, Map<String, List<Person>> personsByAddress) throws Exception {
+        for (Map.Entry<String, List<Person>> entry : personsByAddress.entrySet()) {
+            String address = entry.getKey();
+            List<Person> persons = entry.getValue();
 
-                for (int k = 0; k < persons.size(); k++) {
+            result.andExpect(jsonPath("$.fireStations[" + i + "].personsByAddress['" + address + "']", hasSize(persons.size())));
 
-                    String firstName = JsonPath.read(response.getResponse().getContentAsString(), "$.fireStations[" + i + "].personsByAddress['" + address + "'][" + k + "].firstName");
-                    String lastName = JsonPath.read(response.getResponse().getContentAsString(), "$.fireStations[" + i + "].personsByAddress['" + address + "'][" + k + "].lastName");
+            verifyPersons(result, response, i, address, persons);
+        }
+    }
 
-                    Person person = persons.stream()
-                            .filter(p -> p.getFirstName().equals(firstName) && p.getLastName().equals(lastName))
-                            .findFirst().orElseThrow();
+    private void verifyPersons(ResultActions result, MvcResult response, int i, String address, List<Person> persons) throws Exception {
+        for (int k = 0; k < persons.size(); k++) {
 
-                    result.andExpect(jsonPath("$.fireStations[" + i + "].personsByAddress['" + address + "'][" + k + "].firstName", is(person.getFirstName())));
-                    result.andExpect(jsonPath("$.fireStations[" + i + "].personsByAddress['" + address + "'][" + k + "].lastName", is(person.getLastName())));
-                    result.andExpect(jsonPath("$.fireStations[" + i + "].personsByAddress['" + address + "'][" + k + "].age", is(person.ageJson())));
-                    result.andExpect(jsonPath("$.fireStations[" + i + "].personsByAddress['" + address + "'][" + k + "].phone", is(person.getPhone())));
-                    if (person.getMedicalRecord() != null) {
-                        String[] allergies = person.getMedicalRecord().getAllergies().toArray(new String[0]);
-                        String[] medications = person.getMedicalRecord().getMedications().toArray(new String[0]);
+            String firstName = JsonPath.read(response.getResponse().getContentAsString(), "$.fireStations[" + i + "].personsByAddress['" + address + "'][" + k + "].firstName");
+            String lastName = JsonPath.read(response.getResponse().getContentAsString(), "$.fireStations[" + i + "].personsByAddress['" + address + "'][" + k + "].lastName");
 
-                        result.andExpect(jsonPath("$.fireStations[" + i + "].personsByAddress['" + address + "'][" + k + "].medicalRecord").exists());
-                        result.andExpect(jsonPath("$.fireStations[" + i + "].personsByAddress['" + address + "'][" + k + "].medicalRecord.birthdate", is(person.getMedicalRecord().getBirthdate())));
+            Person person = persons.stream()
+                    .filter(p -> p.getFirstName().equals(firstName) && p.getLastName().equals(lastName))
+                    .findFirst().orElseThrow();
 
-                        result.andExpect(jsonPath("$.fireStations[" + i + "].personsByAddress['" + address + "'][" + k + "].medicalRecord.allergies", hasSize(allergies.length)));
-                        result.andExpect(jsonPath("$.fireStations[" + i + "].personsByAddress['" + address + "'][" + k + "].medicalRecord.allergies", containsInAnyOrder(allergies)));
+            result.andExpect(jsonPath("$.fireStations[" + i + "].personsByAddress['" + address + "'][" + k + "].firstName", is(person.getFirstName())));
+            result.andExpect(jsonPath("$.fireStations[" + i + "].personsByAddress['" + address + "'][" + k + "].lastName", is(person.getLastName())));
+            result.andExpect(jsonPath("$.fireStations[" + i + "].personsByAddress['" + address + "'][" + k + "].age", is(person.ageJson())));
+            result.andExpect(jsonPath("$.fireStations[" + i + "].personsByAddress['" + address + "'][" + k + "].phone", is(person.getPhone())));
 
-                        result.andExpect(jsonPath("$.fireStations[" + i + "].personsByAddress['" + address + "'][" + k + "].medicalRecord.medications", hasSize(medications.length)));
-                        result.andExpect(jsonPath("$.fireStations[" + i + "].personsByAddress['" + address + "'][" + k + "].medicalRecord.medications", containsInAnyOrder(medications)));
-                    } else {
-                        result.andExpect(jsonPath("$.fireStations[" + i + "].personsByAddress['" + address + "'][" + k + "].medicalRecord").doesNotExist());
-                    }
-                }
-            }
+            verifyMedicalRecord(result, i, address, k, person);
+        }
+    }
+
+    private void verifyMedicalRecord(ResultActions result, int i, String address, int k, Person person) throws Exception {
+        if (person.getMedicalRecord() != null) {
+            String[] allergies = person.getMedicalRecord().getAllergies().toArray(new String[0]);
+            String[] medications = person.getMedicalRecord().getMedications().toArray(new String[0]);
+
+            result.andExpect(jsonPath("$.fireStations[" + i + "].personsByAddress['" + address + "'][" + k + "].medicalRecord").exists());
+            result.andExpect(jsonPath("$.fireStations[" + i + "].personsByAddress['" + address + "'][" + k + "].medicalRecord.birthdate", is(person.getMedicalRecord().getBirthdate())));
+
+            result.andExpect(jsonPath("$.fireStations[" + i + "].personsByAddress['" + address + "'][" + k + "].medicalRecord.allergies", hasSize(allergies.length)));
+            result.andExpect(jsonPath("$.fireStations[" + i + "].personsByAddress['" + address + "'][" + k + "].medicalRecord.allergies", containsInAnyOrder(allergies)));
+
+            result.andExpect(jsonPath("$.fireStations[" + i + "].personsByAddress['" + address + "'][" + k + "].medicalRecord.medications", hasSize(medications.length)));
+            result.andExpect(jsonPath("$.fireStations[" + i + "].personsByAddress['" + address + "'][" + k + "].medicalRecord.medications", containsInAnyOrder(medications)));
+        } else {
+            result.andExpect(jsonPath("$.fireStations[" + i + "].personsByAddress['" + address + "'][" + k + "].medicalRecord").doesNotExist());
         }
     }
 

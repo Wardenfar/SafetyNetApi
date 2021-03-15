@@ -21,7 +21,7 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.ResultActions;
 
-import javax.xml.crypto.Data;
+import java.io.UnsupportedEncodingException;
 import java.time.LocalDate;
 import java.util.HashMap;
 import java.util.Map;
@@ -87,32 +87,48 @@ public class ChildAlertRouteTests {
 
         MvcResult response = result.andReturn();
 
+        verifyChildren(children, result, response);
+    }
+
+    private void verifyChildren(Map<Person, Integer> children, ResultActions result, MvcResult response) throws Exception {
         for (int i = 0; i < children.size(); i++) {
 
-            result.andExpect(jsonPath("$.children[" + i + "].child").exists());
-            result.andExpect(jsonPath("$.children[" + i + "].family").exists());
-
-            result.andExpect(jsonPath("$.children[" + i + "].child.firstName").exists());
-            result.andExpect(jsonPath("$.children[" + i + "].child.lastName").exists());
-            result.andExpect(jsonPath("$.children[" + i + "].child.age").exists());
-
-            String firstName = JsonPath.read(response.getResponse().getContentAsString(), "$.children[" + i + "].child.firstName");
-            String lastName = JsonPath.read(response.getResponse().getContentAsString(), "$.children[" + i + "].child.lastName");
-
-            Person child = children.keySet()
-                    .stream()
-                    .filter(p -> p.getFirstName().equals(firstName) && p.getLastName().equals(lastName))
-                    .findFirst().orElseThrow();
+            Person child = getChild(children, response, i);
             int familySize = children.get(child);
 
-            result.andExpect(jsonPath("$.children[" + i + "].child.age", is(child.ageJson())));
-            result.andExpect(jsonPath("$.children[" + i + "].family", hasSize(familySize)));
-
-            for (int j = 0; j < familySize; j++) {
-                result.andExpect(jsonPath("$.children[" + i + "].family[" + j + "].lastName", is(child.getLastName())));
-                result.andExpect(jsonPath("$.children[" + i + "].family[" + j + "].firstName", not(child.getFirstName())));
-            }
+            verifyChild(result, i, child, familySize);
+            verifyFamily(result, i, child, familySize);
         }
+    }
+
+    private void verifyFamily(ResultActions result, int i, Person child, int familySize) throws Exception {
+        for (int j = 0; j < familySize; j++) {
+            result.andExpect(jsonPath("$.children[" + i + "].family[" + j + "].lastName", is(child.getLastName())));
+            result.andExpect(jsonPath("$.children[" + i + "].family[" + j + "].firstName", not(child.getFirstName())));
+        }
+    }
+
+    private void verifyChild(ResultActions result, int i, Person child, int familySize) throws Exception {
+        result.andExpect(jsonPath("$.children[" + i + "].child").exists());
+        result.andExpect(jsonPath("$.children[" + i + "].family").exists());
+
+        result.andExpect(jsonPath("$.children[" + i + "].child.firstName").exists());
+        result.andExpect(jsonPath("$.children[" + i + "].child.lastName").exists());
+        result.andExpect(jsonPath("$.children[" + i + "].child.age").exists());
+
+        result.andExpect(jsonPath("$.children[" + i + "].child.age", is(child.ageJson())));
+        result.andExpect(jsonPath("$.children[" + i + "].family", hasSize(familySize)));
+    }
+
+    private Person getChild(Map<Person, Integer> children, MvcResult response, int i) throws UnsupportedEncodingException {
+        String firstName = JsonPath.read(response.getResponse().getContentAsString(), "$.children[" + i + "].child.firstName");
+        String lastName = JsonPath.read(response.getResponse().getContentAsString(), "$.children[" + i + "].child.lastName");
+
+        Person child = children.keySet()
+                .stream()
+                .filter(p -> p.getFirstName().equals(firstName) && p.getLastName().equals(lastName))
+                .findFirst().orElseThrow();
+        return child;
     }
 
     public void makePhoneAlertRequestFail(String stationNumber) throws Exception {

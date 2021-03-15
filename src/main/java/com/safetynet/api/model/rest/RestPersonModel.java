@@ -21,4 +21,12 @@ public class RestPersonModel {
     private String phone;
     private String email;
 
+    public boolean isEmpty() {
+        return address == null
+                && city == null
+                && zip == null
+                && phone == null
+                && email == null
+                && fireStation == null;
+    }
 }

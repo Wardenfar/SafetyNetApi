@@ -148,6 +148,11 @@ public class PersonController {
             return RestResultModel.buildError("PUT", "person", "LastName should not be null");
         }
 
+        // if no change throw an error
+        if (model.isEmpty()) {
+            return RestResultModel.buildError("PUT", "person", "Fail : no change");
+        }
+
         // Retrieve the existing person by it's name
         Person existing = this.personRepo.findOneByFirstNameAndLastName(model.getFirstName(), model.getLastName());
 
@@ -163,14 +168,9 @@ public class PersonController {
                     // Build Person entity from Model
                     Person toUpdate = Person.fromModelAndDefault(model, existing);
 
-                    // Set it the fireStation (also for the equal check)
+                    // Set it the fireStation
                     toUpdate.setFireStation(fireStation);
-
-                    // Check if they're is some changes
-                    if (existing.equals(toUpdate)) {
-                        // if no change throw an error
-                        return RestResultModel.buildError("PUT", "person", "Fail : no change");
-                    }
+                    toUpdate.setMedicalRecord(existing.getMedicalRecord());
 
                     personRepo.update(toUpdate);
 

@@ -15,7 +15,7 @@ import java.util.Set;
 @RequiredArgsConstructor
 @Getter
 @Setter
-@EqualsAndHashCode
+@EqualsAndHashCode(of = {"station"})
 @ToString
 public class FireStation {
 
@@ -30,7 +30,6 @@ public class FireStation {
      * Set of persons linked to this fireStation
      */
     @JsonView(Views.FireStationRelations.class)
-    @EqualsAndHashCode.Exclude
     @ToString.Exclude
     private Set<Person> persons = new HashSet<>();
 
@@ -49,17 +48,15 @@ public class FireStation {
 
     /**
      * Link a person to this fireStation
-     *
-     * @param person
      */
-    public void add(Person person) {
+    public void addPerson(Person person) {
         persons.add(person);
     }
 
     /**
      * Remove the link between this and the person
      */
-    public void remove(Person person) {
+    public void removePerson(Person person) {
         persons.remove(person);
     }
 }

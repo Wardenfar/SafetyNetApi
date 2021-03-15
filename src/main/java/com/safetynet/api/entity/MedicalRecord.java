@@ -16,7 +16,7 @@ import java.util.List;
 @RequiredArgsConstructor
 @Getter
 @Setter
-@EqualsAndHashCode
+@EqualsAndHashCode(of = {"person"})
 @ToString
 public class MedicalRecord {
 
@@ -33,7 +33,6 @@ public class MedicalRecord {
     private List<String> allergies;
 
     @JsonView(Views.MedicalRecordRelations.class)
-    @EqualsAndHashCode.Exclude
     @ToString.Exclude
     private Person person;
 

@@ -15,7 +15,7 @@ import lombok.*;
 @RequiredArgsConstructor
 @Getter
 @Setter
-@EqualsAndHashCode
+@EqualsAndHashCode(of = {"firstName", "lastName"})
 @JsonIgnoreProperties(ignoreUnknown = true)
 @ToString
 public class Person {
@@ -68,6 +68,21 @@ public class Person {
         } else {
             return "Unknown";
         }
+    }
+
+    @Override
+    public Person clone(){
+        Person result = new Person();
+        result.setFirstName(firstName);
+        result.setLastName(lastName);
+        result.setCity(city);
+        result.setZip(zip);
+        result.setAddress(address);
+        result.setEmail(email);
+        result.setPhone(phone);
+        result.setFireStation(fireStation);
+        result.setMedicalRecord(medicalRecord);
+        return result;
     }
 
     /**

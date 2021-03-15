@@ -20,7 +20,7 @@ public class PersonRepository extends AbstractRepository<Person> {
 
         // Set back reference
         FireStation fireStation = person.getFireStation();
-        fireStation.add(person);
+        fireStation.addPerson(person);
     }
 
     @Override
@@ -42,7 +42,7 @@ public class PersonRepository extends AbstractRepository<Person> {
 
     @Override
     public void remove(Person entity) {
-        entity.getFireStation().remove(entity);
+        entity.getFireStation().removePerson(entity);
         persons.remove(entity);
     }
 

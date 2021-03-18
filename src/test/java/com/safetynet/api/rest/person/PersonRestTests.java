@@ -56,9 +56,9 @@ public class PersonRestTests {
 
     @Test
     public void postPerson() throws Exception {
-        RestPersonModel model1 = new RestPersonModel("1", "Add1", "Last", "address", "city", "00112", "0112457889", "test@gmail.com");
-        RestPersonModel model2 = new RestPersonModel("2", "Add2", "Last", "address", "city", "00112", "0112457889", "test@gmail.com");
-        RestPersonModel model3 = new RestPersonModel("3", "Add3", "Last", "address", "city", "00112", "0112457889", "test@gmail.com");
+        RestPersonModel model1 = new RestPersonModel("506 rue Losange", "Add1", "Last", "address", "city", "00112", "0112457889", "test@gmail.com");
+        RestPersonModel model2 = new RestPersonModel("102 rue Triangle", "Add2", "Last", "address", "city", "00112", "0112457889", "test@gmail.com");
+        RestPersonModel model3 = new RestPersonModel("51 rue Rectangle", "Add3", "Last", "address", "city", "00112", "0112457889", "test@gmail.com");
 
         postPersonSuccess(mvc, personRepo, model1);
         postPersonSuccess(mvc, personRepo, model2);
@@ -67,19 +67,19 @@ public class PersonRestTests {
 
     @Test
     public void postPersonFail_sameName() throws Exception {
-        RestPersonModel fail = new RestPersonModel("2", "Test1", "Example", "address", "city", "00112", "0112457889", "test@gmail.com");
+        RestPersonModel fail = new RestPersonModel("102 rue Triangle", "Test1", "Example", "address", "city", "00112", "0112457889", "test@gmail.com");
         postPersonFail(mvc, personRepo, fail);
     }
 
     @Test
     public void postPersonFail_firstName_null() throws Exception {
-        RestPersonModel fail = new RestPersonModel("2", null, "Last", "address", "city", "00112", "0112457889", "test@gmail.com");
+        RestPersonModel fail = new RestPersonModel("102 rue Triangle", null, "Last", "address", "city", "00112", "0112457889", "test@gmail.com");
         postPersonFail(mvc, personRepo, fail);
     }
 
     @Test
     public void postPersonFail_lastName_null() throws Exception {
-        RestPersonModel fail = new RestPersonModel("2", "AddFail", null, "address", "city", "00112", "0112457889", "test@gmail.com");
+        RestPersonModel fail = new RestPersonModel("102 rue Triangle", "AddFail", null, "address", "city", "00112", "0112457889", "test@gmail.com");
         postPersonFail(mvc, personRepo, fail);
     }
 

@@ -17,7 +17,7 @@ import java.util.Set;
 @RequiredArgsConstructor
 @Getter
 @Setter
-@EqualsAndHashCode(of = {"station"})
+@EqualsAndHashCode(of = {"address"})
 @ToString
 public class FireStation {
 

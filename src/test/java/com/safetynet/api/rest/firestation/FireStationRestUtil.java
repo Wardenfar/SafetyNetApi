@@ -40,7 +40,8 @@ public class FireStationRestUtil {
 
     public static void putFireStationSuccess(MockMvc mvc, FireStationRepository fireStationRepo, RestFireStationModel model) throws Exception {
         int countBefore = fireStationRepo.count();
-        FireStation beforeClone = fireStationRepo.findOneByStation(model.getStation())
+        FireStation beforeClone = fireStationRepo
+                .findOneByAddress(model.getAddress())
                 .clone();
 
         ObjectWriter writer = new ObjectMapper().writer();
@@ -59,7 +60,8 @@ public class FireStationRestUtil {
 
         assert countBefore == countAfter;
 
-        FireStation afterClone = fireStationRepo.findOneByStation(model.getStation())
+        FireStation afterClone = fireStationRepo
+                .findOneByAddress(model.getAddress())
                 .clone();
 
         verifyEditedFireStation(beforeClone, afterClone, model);
@@ -112,7 +114,7 @@ public class FireStationRestUtil {
             if(person.getFireStation() == null){
                 // The field fireStation is required in Person
                 assert false;
-            } else if(person.getFireStation().getStation().equals(model.getStation())){
+            } else if(person.getFireStation().getStation().equals(model.getAddress())){
                 // The fireStation has not been deleted
                 assert false;
             }
@@ -149,18 +151,14 @@ public class FireStationRestUtil {
         }
 
         // Check address field
-        if (model.getAddress() == null) {
-            assert before.getAddress().equals(after.getAddress());
-        } else {
-            assert after.getAddress().equals(model.getAddress());
-        }
+        assert before.getAddress().equals(after.getAddress());
 
         // check persons set
         assert before.getPersons().equals(after.getPersons());
     }
 
     private static void verifyNewFireStation(FireStationRepository fireStationRepo, RestFireStationModel model) {
-        FireStation fireStation = fireStationRepo.findOneByStation(model.getStation());
+        FireStation fireStation = fireStationRepo.findOneByAddress(model.getAddress());
         assert fireStation.getAddress().equals(model.getAddress());
         assert fireStation.getStation().equals(model.getStation());
         assert fireStation.getPersons().isEmpty();

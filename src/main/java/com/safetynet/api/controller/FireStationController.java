@@ -38,12 +38,12 @@ public class FireStationController {
     @JsonView(Views.FireStationModel.class)
     FireStationModel fireStation(@RequestParam String stationNumber) throws EntityNotFound {
         // find the fireStation by its station number
-        FireStation fireStation = this.fireStationRepo.findOneByStation(stationNumber);
-        if (fireStation == null) { // if no fireStation found, then throw and error
-            throw new EntityNotFound("FireStation not found by station number : " + stationNumber);
+        List<FireStation> fireStations = this.fireStationRepo.findAllByStation(stationNumber);
+        if (fireStations.isEmpty()) { // if no fireStation found, then throw and error
+            throw new EntityNotFound("No FireStation found by station number : " + stationNumber);
         }
         // else build and return the model
-        return FireStationModel.build(fireStation);
+        return FireStationModel.build(fireStations);
     }
 
     /**
@@ -54,12 +54,12 @@ public class FireStationController {
     @GetMapping("/phoneAlert")
     PhoneAlertModel phoneAlert(@RequestParam String stationNumber) throws EntityNotFound {
         // find the fireStation by its station number
-        FireStation fireStation = this.fireStationRepo.findOneByStation(stationNumber);
-        if (fireStation == null) { // if no fireStation found, then throw and error
-            throw new EntityNotFound("FireStation not found by station number : " + stationNumber);
+        List<FireStation> fireStations = this.fireStationRepo.findAllByStation(stationNumber);
+        if (fireStations.isEmpty()) { // if no fireStation found, then throw and error
+            throw new EntityNotFound("No FireStation found by station number : " + stationNumber);
         }
         // else build and return the model
-        return PhoneAlertModel.build(fireStation.getPersons());
+        return PhoneAlertModel.build(fireStations);
     }
 
     /**
@@ -91,12 +91,12 @@ public class FireStationController {
         // for each parameter
         for (String station : stations) {
             // find the station
-            FireStation fireStation = this.fireStationRepo.findOneByStation(station);
-            if (fireStation == null) { // if one fireStation is missing : throw an error
-                throw new EntityNotFound("FireStation not found by station number : " + station);
+            List<FireStation> list = this.fireStationRepo.findAllByStation(station);
+            if (list.isEmpty()) { // if one fireStation is missing : throw an error
+                throw new EntityNotFound("No FireStation found by station number : " + station);
             } else {
                 // else add it to the list
-                fireStations.add(fireStation);
+                fireStations.addAll(list);
             }
         }
         // build and return the model from the list
@@ -115,12 +115,12 @@ public class FireStationController {
     @JsonView(Views.RestResultModel.class)
     RestResultModel addFireStation(@RequestBody RestFireStationModel model) {
         // check required parameters (station)
-        if (model.getStation() == null) {
-            return RestResultModel.buildError("POST", "fireStation", "Station Number should not be null");
+        if (model.getAddress() == null) {
+            return RestResultModel.buildError("POST", "fireStation", "Address should not be null");
         }
 
         // Search if the fireStation already exists
-        FireStation existing = this.fireStationRepo.findOneByStation(model.getStation());
+        FireStation existing = this.fireStationRepo.findOneByAddress(model.getAddress());
 
         // if no fireStation already exists and the fireStation
         if (existing == null) {
@@ -158,8 +158,8 @@ public class FireStationController {
     @JsonView(Views.RestResultModel.class)
     RestResultModel deleteFireStation(@RequestBody RestFireStationModel model) {
         // Check required parameters (station)
-        if (model.getStation() == null) {
-            return RestResultModel.buildError("PUT", "fireStation", "Station Number should not be null");
+        if (model.getAddress() == null) {
+            return RestResultModel.buildError("PUT", "fireStation", "Address should not be null");
         }
 
         // if no change throw an error
@@ -168,7 +168,7 @@ public class FireStationController {
         }
 
         // Retrieve the existing fireStation by it's name
-        FireStation existing = this.fireStationRepo.findOneByStation(model.getStation());
+        FireStation existing = this.fireStationRepo.findOneByAddress(model.getAddress());
 
         // Check that the fireStation already exist
         if (existing != null) {
@@ -206,12 +206,12 @@ public class FireStationController {
     @JsonView(Views.RestResultModel.class)
     RestResultModel deleteFireStation(@RequestBody DeleteFireStationModel model) {
         // Check required parameters (station)
-        if (model.getStation() == null) {
+        if (model.getAddress() == null) {
             return RestResultModel.buildError("DELETE", "fireStation", "Station Number should not be null");
         }
 
         // fetch the fireStation
-        FireStation existing = fireStationRepo.findOneByStation(model.getStation());
+        FireStation existing = fireStationRepo.findOneByAddress(model.getAddress());
         if (existing != null) {
             // if the fireStation was found
             boolean success = fireStationRepo.remove(existing);

@@ -63,7 +63,7 @@ public class FloodStationsRouteTests {
 
     @Test
     public void testFloodStation_OneEntry() throws Exception {
-        FireStation fireStation = fireStationRepo.findOneByStation("1");
+        FireStation fireStation = fireStationRepo.findOneByAddress("506 rue Losange");
 
         List<Person> persons = new ArrayList<>();
         persons.add(personRepo.findOneByFirstNameAndLastName("Test1", "Example"));
@@ -79,8 +79,8 @@ public class FloodStationsRouteTests {
 
     @Test
     public void testFloodStation_TwoEntries() throws Exception {
-        FireStation fs1 = fireStationRepo.findOneByStation("1");
-        FireStation fs2 = fireStationRepo.findOneByStation("2");
+        FireStation fs1 = fireStationRepo.findOneByAddress("506 rue Losange");
+        FireStation fs2 = fireStationRepo.findOneByAddress("102 rue Triangle");
 
         List<Person> persons1 = new ArrayList<>();
         persons1.add(personRepo.findOneByFirstNameAndLastName("Test1", "Example"));

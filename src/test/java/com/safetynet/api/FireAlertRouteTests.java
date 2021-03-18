@@ -63,7 +63,7 @@ public class FireAlertRouteTests {
 
     @Test
     public void testFireAlert_1() throws Exception {
-        FireStation fireStation = fireStationRepo.findOneByStation("1");
+        FireStation fireStation = fireStationRepo.findOneByAddress("506 rue Losange");
         List<Person> persons = new ArrayList<>();
         persons.add(personRepo.findOneByFirstNameAndLastName("Test1", "Example"));
         persons.add(personRepo.findOneByFirstNameAndLastName("Test2", "Example"));
@@ -75,7 +75,7 @@ public class FireAlertRouteTests {
 
     @Test
     public void testFireAlert_2() throws Exception {
-        FireStation fireStation = fireStationRepo.findOneByStation("2");
+        FireStation fireStation = fireStationRepo.findOneByAddress("102 rue Triangle");
         List<Person> persons = new ArrayList<>();
         persons.add(personRepo.findOneByFirstNameAndLastName("Jean", "Paul"));
         persons.add(personRepo.findOneByFirstNameAndLastName("Henri", "Paul"));
@@ -85,7 +85,7 @@ public class FireAlertRouteTests {
 
     @Test
     public void testFireAlert_Empty() throws Exception {
-        FireStation fireStation = fireStationRepo.findOneByStation("3");
+        FireStation fireStation = fireStationRepo.findOneByAddress("51 rue Rectangle");
         List<Person> persons = new ArrayList<>();
 
         makeFireAlertRequestSuccess("51 rue Rectangle", fireStation, persons);

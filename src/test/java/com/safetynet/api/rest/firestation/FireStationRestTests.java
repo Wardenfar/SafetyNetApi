@@ -57,8 +57,8 @@ public class FireStationRestTests {
 
     @Test
     public void postFireStation() throws Exception {
-        RestFireStationModel model1 = new RestFireStationModel("5", "50 rue la Paix");
-        RestFireStationModel model2 = new RestFireStationModel("6", "21 avenue du Boulevard");
+        RestFireStationModel model1 = new RestFireStationModel("1", "50 rue la Paix");
+        RestFireStationModel model2 = new RestFireStationModel("2", "21 avenue du Boulevard");
 
         postFireStationSuccess(mvc, fireStationRepo, model1);
         postFireStationSuccess(mvc, fireStationRepo, model2);
@@ -66,8 +66,8 @@ public class FireStationRestTests {
 
     @Test
     public void postFireStationFail_exists() throws Exception {
-        RestFireStationModel model1 = new RestFireStationModel("1", "50 rue la Paix");
-        RestFireStationModel model2 = new RestFireStationModel("2", "21 avenue du Boulevard");
+        RestFireStationModel model1 = new RestFireStationModel("1", "506 rue Losange");
+        RestFireStationModel model2 = new RestFireStationModel("2", "102 rue Triangle");
 
         postFireStationFail(mvc, fireStationRepo, model1);
         postFireStationFail(mvc, fireStationRepo, model2);
@@ -75,7 +75,7 @@ public class FireStationRestTests {
 
     @Test
     public void postFireStationFail_exists_2() throws Exception {
-        RestFireStationModel model = new RestFireStationModel("5", "50 rue la Paix");
+        RestFireStationModel model = new RestFireStationModel("15", "502 rue Point");
 
         postFireStationSuccess(mvc, fireStationRepo, model);
         postFireStationFail(mvc, fireStationRepo, model);
@@ -83,15 +83,15 @@ public class FireStationRestTests {
 
     @Test
     public void postFireStationFail_station_null() throws Exception {
-        RestFireStationModel model = new RestFireStationModel(null, "50 rue la Paix");
+        RestFireStationModel model = new RestFireStationModel("105", null);
 
         postFireStationFail(mvc, fireStationRepo, model);
     }
 
     @Test
     public void putFireStation() throws Exception {
-        RestFireStationModel model1 = new RestFireStationModel("1", "new address");
-        RestFireStationModel model2 = new RestFireStationModel("2", "new address");
+        RestFireStationModel model1 = new RestFireStationModel("101", "506 rue Losange");
+        RestFireStationModel model2 = new RestFireStationModel("102", "102 rue Triangle");
 
         putFireStationSuccess(mvc, fireStationRepo, model1);
         putFireStationSuccess(mvc, fireStationRepo, model2);
@@ -99,9 +99,9 @@ public class FireStationRestTests {
 
     @Test
     public void putFireStationFail_notExist() throws Exception {
-        RestFireStationModel model1 = new RestFireStationModel("9", "new address");
-        RestFireStationModel model2 = new RestFireStationModel("-1", "new address");
-        RestFireStationModel model3 = new RestFireStationModel(null, "new address");
+        RestFireStationModel model1 = new RestFireStationModel("10", "not exists");
+        RestFireStationModel model2 = new RestFireStationModel("12", "same");
+        RestFireStationModel model3 = new RestFireStationModel("15", "same 2");
 
         putFireStationFail(mvc, fireStationRepo, model1);
         putFireStationFail(mvc, fireStationRepo, model2);
@@ -110,8 +110,8 @@ public class FireStationRestTests {
 
     @Test
     public void deleteFireStation() throws Exception {
-        DeleteFireStationModel model1 = new DeleteFireStationModel("3");
-        DeleteFireStationModel model2 = new DeleteFireStationModel("4");
+        DeleteFireStationModel model1 = new DeleteFireStationModel("51 rue Rectangle");
+        DeleteFireStationModel model2 = new DeleteFireStationModel("21 rue Droite");
 
         deleteFireStationSuccess(mvc, personRepo, fireStationRepo, model1);
         deleteFireStationSuccess(mvc, personRepo, fireStationRepo, model2);
@@ -119,8 +119,8 @@ public class FireStationRestTests {
 
     @Test
     public void deleteFireStation_withPersons() throws Exception {
-        DeleteFireStationModel model1 = new DeleteFireStationModel("1");
-        DeleteFireStationModel model2 = new DeleteFireStationModel("2");
+        DeleteFireStationModel model1 = new DeleteFireStationModel("506 rue Losange");
+        DeleteFireStationModel model2 = new DeleteFireStationModel("102 rue Triangle");
 
         deleteFireStationFail(mvc, fireStationRepo, model1);
         deleteFireStationFail(mvc, fireStationRepo, model2);
@@ -128,8 +128,8 @@ public class FireStationRestTests {
 
     @Test
     public void deleteFireStationFail_notExist() throws Exception {
-        DeleteFireStationModel model1 = new DeleteFireStationModel("100");
-        DeleteFireStationModel model2 = new DeleteFireStationModel("-1");
+        DeleteFireStationModel model1 = new DeleteFireStationModel("not exists");
+        DeleteFireStationModel model2 = new DeleteFireStationModel("same");
 
         deleteFireStationFail(mvc, fireStationRepo, model1);
         deleteFireStationFail(mvc, fireStationRepo, model2);

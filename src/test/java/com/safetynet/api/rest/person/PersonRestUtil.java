@@ -123,6 +123,9 @@ public class PersonRestUtil {
     }
 
     private static void verifyEditedPerson(Person before, Person after, RestPersonModel model) {
+        assert before.getFirstName().equals(after.getFirstName());
+        assert before.getLastName().equals(after.getLastName());
+
         // Check address field
         if (model.getAddress() == null) {
             assert before.getAddress().equals(after.getAddress());
@@ -175,7 +178,7 @@ public class PersonRestUtil {
         assert person.getZip().equals(model.getZip());
         assert person.getPhone().equals(model.getPhone());
         assert person.getEmail().equals(model.getEmail());
-        assert person.getFireStation().getStation().equals(model.getFireStation());
+        assert person.getFireStation().getAddress().equals(model.getFireStation());
         assert person.getMedicalRecord() == null;
     }
 

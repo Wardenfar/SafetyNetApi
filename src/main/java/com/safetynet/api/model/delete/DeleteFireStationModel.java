@@ -12,6 +12,6 @@ import lombok.*;
 @ToString
 public class DeleteFireStationModel {
 
-    private String station;
+    private String address;
 
 }

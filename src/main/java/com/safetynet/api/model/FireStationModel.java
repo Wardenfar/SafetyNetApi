@@ -9,7 +9,9 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.util.List;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 /**
  * The model for the /firestation route
@@ -32,11 +34,14 @@ public class FireStationModel {
     private long unknownCount;
 
     /**
-     * Build the model from a FireStation
+     * Build the model from a list of FireStations
      */
-    public static FireStationModel build(FireStation fireStation) {
-        // find all persons linked to this FireStation
-        Set<Person> persons = fireStation.getPersons();
+    public static FireStationModel build(List<FireStation> fireStations) {
+        // find all persons linked to this FireStations
+        Set<Person> persons = fireStations
+                .stream()
+                .flatMap(f -> f.getPersons().stream())
+                .collect(Collectors.toSet());
 
         FireStationModel model = new FireStationModel();
         model.setPersons(persons);

@@ -100,7 +100,7 @@ public class PersonController {
         // Search if the person already exists
         Person existing = this.personRepo.findOneByFirstNameAndLastName(model.getFirstName(), model.getLastName());
         // Search the fireStation
-        FireStation fireStation = this.fireStationRepo.findOneByStation(model.getFireStation());
+        FireStation fireStation = this.fireStationRepo.findOneByAddress(model.getFireStation());
 
         // if no person already exists and the fireStation
         if (existing == null && fireStation != null) {
@@ -162,7 +162,7 @@ public class PersonController {
         if (existing != null) {
             // Get the update fireStation or the old one
             FireStation fireStation = model.getFireStation() != null ?
-                    this.fireStationRepo.findOneByStation(model.getFireStation())
+                    this.fireStationRepo.findOneByAddress(model.getFireStation())
                     : existing.getFireStation();
             // Check if the fireStation exist
             if (fireStation != null) {

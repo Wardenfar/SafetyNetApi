@@ -4,7 +4,9 @@ import com.safetynet.api.entity.FireStation;
 
 import java.util.Collections;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 /**
  * The repository implementation for FireStation Entity
@@ -47,7 +49,7 @@ public class FireStationRepository extends AbstractRepository<FireStation> {
     @Override
     public boolean update(FireStation entity) {
         // Remove previous
-        FireStation prev = findOneByStation(entity.getStation());
+        FireStation prev = findOneByAddress(entity.getAddress());
         fireStations.remove(prev);
 
         // Set persons
@@ -80,11 +82,10 @@ public class FireStationRepository extends AbstractRepository<FireStation> {
     /**
      * return one FireStation by stationNumber
      */
-    public FireStation findOneByStation(String station) {
+    public List<FireStation> findAllByStation(String station) {
         return fireStations.stream()
                 .filter(fs -> fs.getStation().equals(station))
-                .findFirst()
-                .orElse(null);
+                .collect(Collectors.toList());
     }
 
     /**

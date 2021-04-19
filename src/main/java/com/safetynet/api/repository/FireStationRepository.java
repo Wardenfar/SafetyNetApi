@@ -1,6 +1,9 @@
 package com.safetynet.api.repository;
 
 import com.safetynet.api.entity.FireStation;
+import com.safetynet.api.filter.RequestLoggerFilter;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.Collections;
 import java.util.HashSet;
@@ -13,17 +16,20 @@ import java.util.stream.Collectors;
  */
 public class FireStationRepository extends AbstractRepository<FireStation> {
 
+    private static final Logger log = LoggerFactory.getLogger(FireStationRepository.class);
+
     // List of fireStations in this repository
     private Set<FireStation> fireStations = new HashSet<>();
 
     /**
      * Add a FireStation
      *
-     * @param fireStation toAdd
+     * @param entity toAdd
      */
     @Override
-    public boolean add(FireStation fireStation) {
-        fireStations.add(fireStation);
+    public boolean add(FireStation entity) {
+        log.debug("Adding FireStation : " + entity.toString());
+        fireStations.add(entity);
         return true;
     }
 
@@ -48,6 +54,8 @@ public class FireStationRepository extends AbstractRepository<FireStation> {
      */
     @Override
     public boolean update(FireStation entity) {
+        log.debug("Updating FireStation : " + entity.toString());
+
         // Remove previous
         FireStation prev = findOneByAddress(entity.getAddress());
         fireStations.remove(prev);
@@ -65,7 +73,10 @@ public class FireStationRepository extends AbstractRepository<FireStation> {
      */
     @Override
     public boolean remove(FireStation entity) {
+        log.debug("Removing FireStation : " + entity.toString());
+
         if(entity.getPersons().size() > 0){
+            log.error("Could not remove FireStation with one or more Persons");
             return false;
         }
         fireStations.remove(entity);

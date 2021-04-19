@@ -17,19 +17,22 @@ import lombok.*;
 @Setter
 @EqualsAndHashCode(of = {"firstName", "lastName"})
 @JsonIgnoreProperties(ignoreUnknown = true)
-@ToString
+@ToString()
 public class Person {
 
     @NonNull
     @JsonView({Views.PersonFirstName.class})
+    @ToString.Include
     private String firstName;
 
     @NonNull
     @JsonView({Views.PersonLastName.class})
+    @ToString.Include
     private String lastName;
 
     @NonNull
     @JsonView({Views.PersonAddress.class})
+    @ToString.Include
     private String address;
 
     @NonNull

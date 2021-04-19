@@ -18,14 +18,16 @@ import java.util.Set;
 @Getter
 @Setter
 @EqualsAndHashCode(of = {"address"})
-@ToString
+@ToString()
 public class FireStation {
 
     @NonNull
     @JsonView(Views.FireStationProperties.class)
+    @ToString.Include
     private String station;
 
     @JsonView(Views.FireStationProperties.class)
+    @ToString.Include
     private String address;
 
     /**

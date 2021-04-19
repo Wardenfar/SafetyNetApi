@@ -19,19 +19,22 @@ import java.util.List;
 @Getter
 @Setter
 @EqualsAndHashCode(of = {"person"})
-@ToString
+@ToString()
 public class MedicalRecord {
 
     @NonNull
     @JsonView(Views.MedicalRecordProperties.class)
+    @ToString.Include
     private String birthdate;
 
     @NonNull
     @JsonView(Views.MedicalRecordProperties.class)
+    @ToString.Include
     private List<String> medications;
 
     @NonNull
     @JsonView(Views.MedicalRecordProperties.class)
+    @ToString.Include
     private List<String> allergies;
 
     @JsonView(Views.MedicalRecordRelations.class)

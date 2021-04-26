@@ -1,0 +1,13 @@
+{
+  "persons": [
+    { "firstName":"John", "lastName":"Boyd", "address":"1509 Culver St", "city":"Culver", "zip":"97451", "phone":"841-874-6512", "email":"jaboyd@email.com" },
+    { "firstName":"Teddy", "lastName":"Boyd", "address":"2658 Test St", "city":"Culver", "zip":"97451", "phone":"841-874-6512", "email":"jaboyd@email.com" },
+    { "firstName":"Jean", "lastName":"Boyd", "address":"missing", "city":"Culver", "zip":"97451", "phone":"841-874-6512", "email":"jaboyd@email.com" }
+  ],
+  "firestations": [
+    { "address":"1509 Culver St", "station":"1" },
+    { "address":"2658 Test St", "station":"2" },
+    { "address":"8950 Test St", "station":"3" }
+  ],
+  "medicalrecords": []
+}

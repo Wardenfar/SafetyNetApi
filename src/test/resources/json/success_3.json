@@ -1,0 +1,10 @@
+{
+  "persons": [],
+  "firestations": [
+    { "address":"1509 Culver St", "station":"1" },
+    { "address":"1509 Hey St", "station":"1" },
+    { "address":"2658 Test St", "station":"2" },
+    { "address":"2658 Test St", "station":"3" }
+  ],
+  "medicalrecords": []
+}

@@ -14,7 +14,6 @@ import java.util.Set;
  * The fireStation Entity
  */
 @NoArgsConstructor
-@RequiredArgsConstructor
 @Getter
 @Setter
 @EqualsAndHashCode(of = {"address"})

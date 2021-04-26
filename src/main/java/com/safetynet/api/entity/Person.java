@@ -12,7 +12,6 @@ import lombok.*;
  * The Person entity
  */
 @NoArgsConstructor
-@RequiredArgsConstructor
 @Getter
 @Setter
 @EqualsAndHashCode(of = {"firstName", "lastName"})

@@ -15,7 +15,6 @@ import java.util.List;
  * the MedicalRecord Entity
  */
 @NoArgsConstructor
-@RequiredArgsConstructor
 @Getter
 @Setter
 @EqualsAndHashCode(of = {"person"})

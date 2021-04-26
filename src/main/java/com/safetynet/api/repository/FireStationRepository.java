@@ -1,7 +1,6 @@
 package com.safetynet.api.repository;
 
 import com.safetynet.api.entity.FireStation;
-import com.safetynet.api.filter.RequestLoggerFilter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

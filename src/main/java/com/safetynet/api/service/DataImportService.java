@@ -8,17 +8,14 @@ import com.safetynet.api.entity.Person;
 import com.safetynet.api.repository.FireStationRepository;
 import com.safetynet.api.repository.MedicalRecordRepository;
 import com.safetynet.api.repository.PersonRepository;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
+import org.tinylog.Logger;
 
 import java.io.IOException;
 import java.io.InputStream;
 
 @Service
 public class DataImportService {
-
-    private static final Logger log = LoggerFactory.getLogger(DataImportService.class);
 
     FireStationRepository fireStationRepo;
     MedicalRecordRepository medicalRecordRepo;
@@ -42,10 +39,10 @@ public class DataImportService {
         processMedicalRecords(json.get("medicalrecords"), medicalRecordRepo, personRepo);
 
         // Print some stats
-        log.info("Loaded !");
-        log.info("FireStations    : " + fireStationRepo.count());
-        log.info("Persons         : " + personRepo.count());
-        log.info("Medical Records : " + medicalRecordRepo.count());
+        Logger.info("Loaded !");
+        Logger.info("FireStations    : " + fireStationRepo.count());
+        Logger.info("Persons         : " + personRepo.count());
+        Logger.info("Medical Records : " + medicalRecordRepo.count());
     }
 
     /**
@@ -68,7 +65,7 @@ public class DataImportService {
 
             FireStation fireStation = fireStationRepo.findOneByAddress(person.getAddress());
             if (fireStation == null) {
-                log.error("No fire station found for address : " + person.getAddress());
+                Logger.error("No fire station found for address : " + person.getAddress());
                 continue;
             }
             person.setFireStation(fireStation);
@@ -90,7 +87,7 @@ public class DataImportService {
 
             Person person = personRepo.findOneByFirstNameAndLastName(personFirstName, personLastName);
             if (person == null) {
-                log.error("No person found for name : " + personFirstName + " " + personLastName);
+                Logger.error("No person found for name : " + personFirstName + " " + personLastName);
                 continue;
             }
             medicalRecord.setPerson(person);

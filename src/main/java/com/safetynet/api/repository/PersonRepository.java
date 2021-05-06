@@ -2,8 +2,7 @@ package com.safetynet.api.repository;
 
 import com.safetynet.api.entity.FireStation;
 import com.safetynet.api.entity.Person;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import org.tinylog.Logger;
 
 import java.util.Collections;
 import java.util.HashSet;
@@ -12,13 +11,11 @@ import java.util.stream.Collectors;
 
 public class PersonRepository extends AbstractRepository<Person> {
 
-    private static final Logger log = LoggerFactory.getLogger(PersonRepository.class);
-
     private Set<Person> persons = new HashSet<>();
 
     @Override
     public boolean add(Person person) {
-        log.debug("Adding Person : " + person.toString());
+        Logger.debug("Adding Person : " + person.toString());
 
         // the fireStation property is Required
         if (person.getFireStation() == null) {
@@ -46,11 +43,11 @@ public class PersonRepository extends AbstractRepository<Person> {
 
     @Override
     public boolean update(Person entity) {
-        log.debug("Updating Person : " + entity.toString());
+        Logger.debug("Updating Person : " + entity.toString());
 
         // Checks not null
         if (entity.getFireStation() == null) {
-            log.error("FireStation is null");
+            Logger.error("FireStation is null");
             return false;
         }
 
@@ -68,10 +65,10 @@ public class PersonRepository extends AbstractRepository<Person> {
 
     @Override
     public boolean remove(Person entity) {
-        log.debug("Removing Person : " + entity.toString());
+        Logger.debug("Removing Person : " + entity.toString());
 
         if (entity.getMedicalRecord() != null) {
-            log.error("MedicalRecord is not null");
+            Logger.error("MedicalRecord is not null");
             return false;
         }
         entity.getFireStation().removePerson(entity);

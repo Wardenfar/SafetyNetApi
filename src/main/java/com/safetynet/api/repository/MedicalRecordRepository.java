@@ -2,8 +2,7 @@ package com.safetynet.api.repository;
 
 import com.safetynet.api.entity.MedicalRecord;
 import com.safetynet.api.entity.Person;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import org.tinylog.Logger;
 
 import java.util.Collections;
 import java.util.HashSet;
@@ -13,8 +12,6 @@ import java.util.Set;
  * The repository implementation for MedicalRecord Entity
  */
 public class MedicalRecordRepository extends AbstractRepository<MedicalRecord> {
-
-    private static final Logger log = LoggerFactory.getLogger(MedicalRecord.class);
 
     // All entities in this repository
     private Set<MedicalRecord> medicalRecords = new HashSet<>();
@@ -31,10 +28,10 @@ public class MedicalRecordRepository extends AbstractRepository<MedicalRecord> {
 
     @Override
     public boolean update(MedicalRecord entity) {
-        log.debug("Updating MedicalRecord : " + entity.toString());
+        Logger.debug("Updating MedicalRecord : " + entity.toString());
 
         if(entity.getPerson() == null){
-            log.error("Person is null");
+            Logger.error("Person is null");
             return false;
         }
 
@@ -42,13 +39,13 @@ public class MedicalRecordRepository extends AbstractRepository<MedicalRecord> {
 
         // Prev does not exists
         if(prev == null){
-            log.error("Previous does not exist");
+            Logger.error("Previous does not exist");
             return false;
         }
 
         // The person has been updated
         if(!entity.getPerson().equals(prev.getPerson())){
-            log.error("Could not update the Person");
+            Logger.error("Could not update the Person");
             return false;
         }
 
@@ -61,7 +58,7 @@ public class MedicalRecordRepository extends AbstractRepository<MedicalRecord> {
 
     @Override
     public boolean remove(MedicalRecord entity) {
-        log.debug("Removing MedicalRecord : " + entity.toString());
+        Logger.debug("Removing MedicalRecord : " + entity.toString());
 
         medicalRecords.remove(entity);
         if(entity.getPerson() != null){
@@ -72,16 +69,16 @@ public class MedicalRecordRepository extends AbstractRepository<MedicalRecord> {
 
     @Override
     public boolean add(MedicalRecord entity) {
-        log.debug("Adding MedicalRecord : " + entity.toString());
+        Logger.debug("Adding MedicalRecord : " + entity.toString());
 
         // The person property is required
         if (entity.getPerson() == null) {
-            log.error("The person is required");
+            Logger.error("The person is required");
             return false;
         }
         // The person has already a Medical Record
         if (entity.getPerson().getMedicalRecord() != null && entity.getPerson().getMedicalRecord() != entity) {
-            log.error("The person has already a Medical Record");
+            Logger.error("The person has already a Medical Record");
             return false;
         }
 
